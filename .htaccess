@@ -1,0 +1,11 @@
+# Configuración básica para URLs amigables y seguridad
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/index.php [QSA,L]
+
+# Seguridad: evitar acceso a archivos sensibles
+<FilesMatch "\.(htaccess|env|ini|log|sh|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

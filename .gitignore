@@ -1,0 +1,9 @@
+# Archivos y carpetas a ignorar por Git
+/vendor/
+/node_modules/
+/public/uploads/
+.env
+.DS_Store
+*.log
+.idea/
+.vscode/

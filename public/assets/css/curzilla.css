@@ -1,0 +1,78 @@
+/* curzilla.css - componentes prefijados curzilla extraídos de styles.css */
+
+.curzilla-header { background: linear-gradient(135deg, #a996ff 0%, #6c63ff 100%); padding: 12px 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+.curzilla-header-content { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 20px; }
+.curzilla-logo-img { height:32px; filter:brightness(0) invert(1); }
+.curzilla-nav { display:flex; align-items:center; gap:24px; }
+.curzilla-nav-link { color:white; text-decoration:none; font-weight:500; transition:opacity 0.2s; }
+.curzilla-nav-link:hover { opacity:0.8; }
+.curzilla-search-container { position:relative; display:flex; align-items:center; }
+.curzilla-search-input { padding:8px 40px 8px 12px; border:none; border-radius:20px; background:white; width:200px; font-size:14px; }
+.curzilla-search-btn { position:absolute; right:8px; background:none; border:none; cursor:pointer; font-size:16px; }
+.curzilla-dropdown-btn { background:none; border:none; color:white; font-weight:500; cursor:pointer; font-size:14px; }
+.curzilla-header-actions { display:flex; gap:12px; }
+.curzilla-icon-btn { background: rgba(255,255,255,0.2); border:none; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; transition: background-color 0.2s; }
+.curzilla-icon-btn:hover { background: rgba(255,255,255,0.3); }
+.curzilla-main-content { padding:40px 20px; }
+.curzilla-container { max-width:1200px; margin:0 auto; }
+.curzilla-page-title { font-size:24px; font-weight:600; margin-bottom:32px; color:#1d1b20; }
+.curzilla-course-form { background:white; padding:32px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
+.curzilla-form-row { display:flex; gap:24px; margin-bottom:24px; }
+.curzilla-form-group { flex:1; margin-bottom:24px; }
+.curzilla-form-group label { display:block; margin-bottom:8px; font-weight:500; color:#49454f; }
+.curzilla-form-input { width:100%; padding:12px 16px; border:2px solid #d9d9d9; border-radius:8px; font-size:14px; transition:border-color 0.2s; }
+.curzilla-form-input:focus { outline:none; border-color:#6c63ff; }
+.curzilla-form-textarea { width:100%; padding:12px 16px; border:2px solid #d9d9d9; border-radius:8px; font-size:14px; resize:vertical; min-height:120px; font-family:inherit; }
+.curzilla-form-textarea:focus { outline:none; border-color:#6c63ff; }
+.curzilla-counter-input { display:flex; align-items:center; border:2px solid #d9d9d9; border-radius:8px; overflow:hidden; width:fit-content; }
+.curzilla-counter-btn { background:#f5f5f5; border:none; padding:8px 12px; cursor:pointer; font-size:16px; font-weight:bold; transition: background-color 0.2s; }
+.curzilla-counter-btn:hover { background:#e0e0e0; }
+.curzilla-counter-value { border:none; padding:8px 16px; text-align:center; width:60px; font-size:14px; font-weight:bold; }
+.curzilla-counter-value.curzilla-purple { background:#6c63ff; color:white; }
+.curzilla-counter-value:focus { outline:none; }
+.curzilla-duration-section { margin:32px 0; }
+.curzilla-section-title { display:flex; align-items:center; gap:8px; font-size:18px; font-weight:600; margin-bottom:20px; color:#1d1b20; }
+.curzilla-clock-icon { font-size:20px; }
+.curzilla-duration-controls { display:flex; gap:24px; flex-wrap:wrap; }
+.curzilla-duration-controls .curzilla-form-group { margin-bottom:0; }
+.curzilla-date-input { display:flex; gap:8px; }
+.curzilla-date-part { width:60px; padding:8px 12px; border:2px solid #d9d9d9; border-radius:8px; text-align:center; font-size:14px; }
+.curzilla-date-part:focus { outline:none; border-color:#6c63ff; }
+.curzilla-select-container { position:relative; }
+.curzilla-form-select { width:100%; padding:12px 16px; border:2px solid #d9d9d9; border-radius:8px; font-size:14px; background:white; cursor:pointer; }
+.curzilla-form-select:focus { outline:none; border-color:#6c63ff; }
+.curzilla-price-input { background:#f8f9fa; }
+.curzilla-upload-section { margin:32px 0; }
+.curzilla-upload-title { font-size:16px; font-weight:600; margin-bottom:16px; color:#1d1b20; }
+.curzilla-upload-area { border:2px dashed #d9d9d9; border-radius:12px; padding:40px 20px; text-align:center; background:#fafafa; transition: border-color 0.2s; }
+.curzilla-upload-area:hover { border-color:#6c63ff; }
+.curzilla-upload-content { display:flex; flex-direction:column; align-items:center; gap:12px; }
+.curzilla-upload-icon { font-size:32px; opacity:0.6; }
+.curzilla-upload-text { color:#666; font-size:14px; }
+.curzilla-upload-btn { background:#ff6a00; color:white; border:none; padding:10px 20px; border-radius:20px; font-weight:500; cursor:pointer; transition: background-color 0.2s; }
+.curzilla-upload-btn:hover { background:#e55a00; }
+.curzilla-course-content-section { background:#eaddff; border-radius:12px; padding:24px; margin:32px 0; }
+.curzilla-content-title { background:#6c63ff; color:white; padding:12px 24px; border-radius:8px; font-size:16px; font-weight:600; margin-bottom:20px; text-align:center; }
+.curzilla-content-item { background:white; border-radius:8px; padding:16px; display:flex; align-items:center; gap:16px; border:1px solid #d9d9d9; }
+.curzilla-content-icon { font-size:24px; width:40px; text-align:center; }
+.curzilla-content-details { flex:1; display:flex; flex-direction:column; gap:4px; }
+.curzilla-content-name { font-weight:500; color:#1d1b20; }
+.curzilla-content-duration { font-size:12px; color:#666; }
+.curzilla-content-files { display:flex; align-items:center; gap:8px; font-size:12px; color:#666; }
+.curzilla-file-link { color:#6c63ff; text-decoration:none; }
+.curzilla-file-link:hover { text-decoration:underline; }
+.curzilla-form-actions { display:flex; gap:16px; justify-content:center; margin-top:40px; }
+.curzilla-btn { padding:12px 32px; border-radius:24px; font-weight:500; cursor:pointer; transition:all 0.2s; border:2px solid transparent; font-size:14px; }
+.curzilla-btn-secondary { background:white; color:#6c63ff; border-color:#6c63ff; }
+.curzilla-btn-secondary:hover { background:#f5f3ff; }
+.curzilla-btn-primary { background:#6c63ff; color:white; border-color:#6c63ff; }
+.curzilla-btn-primary:hover { background:#5a52d5; }
+
+@media (max-width:768px) {
+    .curzilla-header-content { flex-direction:column; gap:16px; }
+    .curzilla-nav { flex-wrap:wrap; justify-content:center; }
+    .curzilla-form-row { flex-direction:column; }
+    .curzilla-duration-controls { flex-direction:column; }
+    .curzilla-course-form { padding:20px; }
+    .curzilla-container { padding:0 16px; }
+}
