@@ -1,14 +1,16 @@
-<?php include __DIR__ . '/../layouts/layout.php'; ?>
+<?php 
+$pageTitle = "Crear Curso - Curzilla";
+include __DIR__ . '/../layouts/layout.php';
+?>
 
 <!-- Main Content -->
-    <!-- Updated main content classes to be more specific -->
-    <main class="curzilla-main-content">
-        <div class="curzilla-container">
-            <h1 class="curzilla-page-title">Aquí puedes agregar el contenido de tu proyecto</h1>
-            
-            <form class="curzilla-course-form">
-                <!-- Course Title and Max Participants -->
-                <!-- Updated form classes to avoid conflicts -->
+<main class="curzilla-main-content">
+    <section class="curzilla-container">
+        <h1 class="curzilla-page-title">Aquí puedes agregar el contenido de tu proyecto</h1>
+        
+        <form class="curzilla-course-form">
+            <fieldset>
+                <legend class="sr-only">Detalles del Curso</legend>
                 <div class="curzilla-form-row">
                     <div class="curzilla-form-group">
                         <label for="course-title">Título del curso</label>
@@ -24,59 +26,61 @@
                     </div>
                 </div>
 
-                <!-- Course Description -->
                 <div class="curzilla-form-group">
                     <label for="course-description">Descripción del Curso</label>
                     <textarea id="course-description" class="curzilla-form-textarea" rows="6"></textarea>
                 </div>
+            </fieldset>
 
-                <!-- Duration Section -->
-                <div class="curzilla-duration-section">
-                    <h3 class="curzilla-section-title">
-                        <span class="curzilla-clock-icon">🕐</span>
-                        Duración del curso
-                    </h3>
+            <fieldset class="curzilla-duration-section">
+                <legend class="curzilla-section-title">
+                    <span class="curzilla-clock-icon" aria-hidden="true">🕐</span>
+                    Duración del curso
+                </legend>
+                <div class="curzilla-duration-controls">
+                    <div class="curzilla-form-group">
+                        <label for="sections">Secciones</label>
+                        <div class="curzilla-counter-input">
+                            <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="sections">-</button>
+                            <input type="number" id="sections" value="0" class="curzilla-counter-value curzilla-purple">
+                            <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="sections">+</button>
+                        </div>
+                    </div>
                     
-                    <div class="curzilla-duration-controls">
-                        <div class="curzilla-form-group">
-                            <label>Secciones</label>
-                            <div class="curzilla-counter-input">
-                                <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="sections">-</button>
-                                <input type="number" id="sections" value="0" class="curzilla-counter-value curzilla-purple">
-                                <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="sections">+</button>
-                            </div>
+                    <div class="curzilla-form-group">
+                        <label for="classes">Clases</label>
+                        <div class="curzilla-counter-input">
+                            <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="classes">-</button>
+                            <input type="number" id="classes" value="0" class="curzilla-counter-value curzilla-purple">
+                            <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="classes">+</button>
                         </div>
-                        
-                        <div class="curzilla-form-group">
-                            <label>Clases</label>
-                            <div class="curzilla-counter-input">
-                                <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="classes">-</button>
-                                <input type="number" id="classes" value="0" class="curzilla-counter-value curzilla-purple">
-                                <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="classes">+</button>
-                            </div>
+                    </div>
+                    
+                    <div class="curzilla-form-group">
+                        <label for="hours">Horas</label>
+                        <div class="curzilla-counter-input">
+                            <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="hours">-</button>
+                            <input type="number" id="hours" value="0" class="curzilla-counter-value curzilla-purple">
+                            <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="hours">+</button>
                         </div>
-                        
-                        <div class="curzilla-form-group">
-                            <label>Horas</label>
-                            <div class="curzilla-counter-input">
-                                <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="hours">-</button>
-                                <input type="number" id="hours" value="0" class="curzilla-counter-value curzilla-purple">
-                                <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="hours">+</button>
-                            </div>
-                        </div>
-                        
-                        <div class="curzilla-form-group">
-                            <label>Fecha de Inicio</label>
-                            <div class="curzilla-date-input">
-                                <input type="number" placeholder="02" class="curzilla-date-part" min="1" max="31">
-                                <input type="number" placeholder="8" class="curzilla-date-part" min="1" max="12">
-                                <input type="number" placeholder="2025" class="curzilla-date-part" min="2024">
-                            </div>
+                    </div>
+                    
+                    <div class="curzilla-form-group">
+                        <p>Fecha de Inicio</p>
+                        <div class="curzilla-date-input">
+                            <label for="day" class="sr-only">Día</label>
+                            <input type="number" id="day" placeholder="02" class="curzilla-date-part" min="1" max="31">
+                            <label for="month" class="sr-only">Mes</label>
+                            <input type="number" id="month" placeholder="8" class="curzilla-date-part" min="1" max="12">
+                            <label for="year" class="sr-only">Año</label>
+                            <input type="number" id="year" placeholder="2025" class="curzilla-date-part" min="2024">
                         </div>
                     </div>
                 </div>
+            </fieldset>
 
-                <!-- Modality and Price -->
+            <fieldset>
+                <legend class="sr-only">Modalidad y Precio</legend>
                 <div class="curzilla-form-row">
                     <div class="curzilla-form-group">
                         <label for="modality">Modalidad</label>
@@ -90,74 +94,69 @@
                     </div>
                     <div class="curzilla-form-group">
                         <label for="price">
-                            <span class="curzilla-price-icon">💰</span>
+                            <span class="curzilla-price-icon" aria-hidden="true">💰</span>
                             Agrega el precio
                         </label>
                         <input type="text" id="price" placeholder="$0.00" class="curzilla-form-input curzilla-price-input">
                     </div>
                 </div>
+            </fieldset>
 
-                <!-- File Upload Sections -->
-                <!-- Updated upload section classes -->
-                <div class="curzilla-upload-section">
-                    <h3 class="curzilla-upload-title">+ Agregar video</h3>
-                    <div class="curzilla-upload-area">
-                        <div class="curzilla-upload-content">
-                            <div class="curzilla-upload-icon">☁️</div>
-                            <p class="curzilla-upload-text">Máximo: 1GB</p>
-                            <button type="button" class="curzilla-upload-btn">+ Subir video</button>
-                        </div>
+            <fieldset class="curzilla-upload-section">
+                <legend class="curzilla-upload-title">+ Agregar video</legend>
+                <div class="curzilla-upload-area">
+                    <div class="curzilla-upload-content">
+                        <div class="curzilla-upload-icon" aria-hidden="true">☁️</div>
+                        <p class="curzilla-upload-text">Máximo: 1GB</p>
+                        <button type="button" class="curzilla-upload-btn">+ Subir video</button>
                     </div>
                 </div>
+            </fieldset>
 
-                <div class="curzilla-upload-section">
-                    <h3 class="curzilla-upload-title">+ Adjuntar archivos</h3>
-                    <div class="curzilla-upload-area">
-                        <div class="curzilla-upload-content">
-                            <div class="curzilla-upload-icon">📁</div>
-                            <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG</p>
-                            <button type="button" class="curzilla-upload-btn">+ Subir archivo</button>
-                        </div>
+            <fieldset class="curzilla-upload-section">
+                <legend class="curzilla-upload-title">+ Adjuntar archivos</legend>
+                <div class="curzilla-upload-area">
+                    <div class="curzilla-upload-content">
+                        <div class="curzilla-upload-icon" aria-hidden="true">📁</div>
+                        <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG</p>
+                        <button type="button" class="curzilla-upload-btn">+ Subir archivo</button>
                     </div>
                 </div>
+            </fieldset>
 
-                <div class="curzilla-upload-section">
-                    <h3 class="curzilla-upload-title">+ Adjuntar una imagen para la portada</h3>
-                    <div class="curzilla-upload-area">
-                        <div class="curzilla-upload-content">
-                            <div class="curzilla-upload-icon">🖼️</div>
-                            <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG</p>
-                            <button type="button" class="curzilla-upload-btn">+ Subir archivo</button>
-                        </div>
+            <fieldset class="curzilla-upload-section">
+                <legend class="curzilla-upload-title">+ Adjuntar una imagen para la portada</legend>
+                <div class="curzilla-upload-area">
+                    <div class="curzilla-upload-content">
+                        <div class="curzilla-upload-icon" aria-hidden="true">🖼️</div>
+                        <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG</p>
+                        <button type="button" class="curzilla-upload-btn">+ Subir archivo</button>
                     </div>
                 </div>
+            </fieldset>
 
-                <!-- Course Content Section -->
-                <!-- Updated course content section classes -->
-                <div class="curzilla-course-content-section">
-                    <h2 class="curzilla-content-title">Contenido del Curso</h2>
-                    <div class="curzilla-content-item">
-                        <div class="curzilla-content-icon">📺</div>
-                        <div class="curzilla-content-details">
-                            <span class="curzilla-content-name">Introducción curso python</span>
-                            <span class="curzilla-content-duration">Duración: 05:45</span>
-                        </div>
-                        <div class="curzilla-content-files">
-                            <span>Archivos subidos:</span>
-                            <a href="#" class="curzilla-file-link">Archivo adjunto</a>
-                        </div>
+            <section class="curzilla-course-content-section">
+                <h2 class="curzilla-content-title">Contenido del Curso</h2>
+                <div class="curzilla-content-item">
+                    <div class="curzilla-content-icon" aria-hidden="true">📺</div>
+                    <div class="curzilla-content-details">
+                        <span class="curzilla-content-name">Introducción curso python</span>
+                        <span class="curzilla-content-duration">Duración: 05:45</span>
+                    </div>
+                    <div class="curzilla-content-files">
+                        <span>Archivos subidos:</span>
+                        <a href="#" class="curzilla-file-link">Archivo adjunto</a>
                     </div>
                 </div>
+            </section>
 
-                <!-- Action Buttons -->
-                <!-- Updated button classes to avoid conflicts -->
-                <div class="curzilla-form-actions">
-                    <button type="button" class="curzilla-btn curzilla-btn-secondary">Limpiar</button>
-                    <button type="submit" class="curzilla-btn curzilla-btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </main>
+            <footer class="curzilla-form-actions">
+                <button type="button" class="curzilla-btn curzilla-btn-secondary">Limpiar</button>
+                <button type="submit" class="curzilla-btn curzilla-btn-primary">Guardar</button>
+            </footer>
+        </form>
+    </section>
+</main>
 
 
 <script>

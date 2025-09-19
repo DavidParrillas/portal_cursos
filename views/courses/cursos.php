@@ -1,26 +1,29 @@
-<?php include __DIR__ . '/../layouts/layout.php'; ?>
+<?php 
+$pageTitle = "Crear Curso - Curzilla";
+include __DIR__ . '/../layouts/layout.php';
+?>
 
-<div class="courses-section">
+<main class="courses-section">
     <h2 class="courses-title">Cursos Disponibles</h2>
     
-    <div class="courses-grid">
+    <section class="courses-grid">
         <!-- Curso 1 -->
-        <div class="course-card">
+        <article class="course-card">
             <img src="" alt="Cyber Seguridad" class="course-image">
             <div class="course-content">
                 <h3 class="course-title">Ciber Seguridad</h3>
-                <div class="course-stats">
+                <footer class="course-stats">
                     <div class="rating">
-                        <span class="star">⭐</span>
+                        <span class="star" aria-hidden="true">⭐</span>
                         <span>4.5</span>
                     </div>
                     <span>16K calificaciones</span>
                     <span>51.7 horas</span>
-                </div>
+                </footer>
                 <div class="course-price">$299.99</div>
-                <button class="btn btn-primary">Ver detalles</button>
+                <a href="#" class="btn btn-primary">Ver detalles</a>
             </div>
-        </div>
+        </article>
 
-    </div>
-</div>
+    </section>
+</main>

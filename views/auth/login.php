@@ -3,14 +3,14 @@ $pageTitle = "Iniciar Sesión - Curzilla";
 include __DIR__ . '/../layouts/layout.php';
 ?>
 
-<div class="main-content">
+<main class="main-content">
     <!-- Illustration Section -->
-    <div class="illustration-section">
-        <img src="/portal_cursos/public/assets/img/placeholders/undraw_explore_kfv3%201.png" class="illustration-image">
-    </div>
+    <aside class="illustration-section">
+        <img src="/portal_cursos/public/assets/img/placeholders/undraw_explore_kfv3%201.png" alt="Illustration of a person exploring content." class="illustration-image">
+    </aside>
 
     <!-- Login Form Section -->
-    <div class="form-section">
+    <section class="form-section">
         <div class="form-container">
             <h1 class="form-title">Inicia sesión en tu cuenta</h1>
             <p class="form-subtitle">Accede a tus cursos y contenido personalizado</p>
@@ -22,10 +22,12 @@ include __DIR__ . '/../layouts/layout.php';
             <form id="loginForm" method="POST" action="/portal_cursos/public/auth_handler.php">
                 <input type="hidden" name="action" value="login">
                 <div class="form-group">
-                    <input type="email" name="correo" class="form-input" placeholder="Correo electrónico" required>
+                    <label for="correo" class="form-label sr-only">Correo electrónico</label>
+                    <input type="email" id="correo" name="correo" class="form-input" placeholder="Correo electrónico" required>
                 </div>
                 
                 <div class="form-group">
+                    <label for="password" class="form-label sr-only">Contraseña</label>
                     <div class="input-container">
                         <input 
                             type="password" 
@@ -35,7 +37,7 @@ include __DIR__ . '/../layouts/layout.php';
                             placeholder="Contraseña"
                             required
                         >
-                        <button type="button" class="toggle-password" data-target="password">
+                        <button type="button" class="toggle-password" data-target="password" aria-label="Toggle password visibility">
                             <i class="fa-regular fa-eye" style="color: #000000;"></i>
                         </button>
                     </div>
@@ -43,17 +45,17 @@ include __DIR__ . '/../layouts/layout.php';
                 
                 <button type="submit" class="continue-btn">Iniciar Sesión</button>
                 
-                <div class="help-link">
+                <p class="help-link">
                     <a href="#">¿Olvidaste tu contraseña?</a>
-                </div>
+                </p>
                 
-                <div class="login-link">
+                <p class="login-link">
                     ¿No tienes una cuenta? <a href="/portal_cursos/views/auth/registro.php">Regístrate aquí</a>
-                </div>
+                </p>
             </form>
         </div>
-    </div>
-</div>
+    </section>
+</main>
 
 <script>
     // Toggle password visibility

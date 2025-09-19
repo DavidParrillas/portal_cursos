@@ -3,20 +3,21 @@ $pageTitle = "Crea una contraseña segura - Curzilla";
 include __DIR__ . '/../layouts/layout.php';
 ?>
     <!-- Main Content -->
-    <div class="main-content">
+    <main class="main-content">
         <!-- Illustration Section -->
-        <div class="illustration-section">
-            <img src="/portal_cursos/public/assets/img/placeholders/undraw_monitor_ypga%201.png" class="illustration-image">
-        </div>
+        <aside class="illustration-section">
+            <img src="/portal_cursos/public/assets/img/placeholders/undraw_monitor_ypga%201.png" alt="Illustration of a person in front of a monitor." class="illustration-image">
+        </aside>
 
         <!-- Registration Form Section -->
-        <div class="form-section">
+        <section class="form-section">
             <div class="form-container">
                 <h1 class="form-title">Crea una contraseña segura</h1>
                 <p class="form-subtitle">Crea una contraseña con letras, símbolos y números</p>
                 
                 <form id="passwordForm">
                     <div class="form-group">
+                        <label for="password" class="form-label">Contraseña</label>
                         <div class="input-container">
                             <input 
                                 type="password" 
@@ -24,12 +25,13 @@ include __DIR__ . '/../layouts/layout.php';
                                 class="form-input" 
                                 placeholder="ej: mario123%"
                                 required
+                                aria-describedby="passwordStrength"
                             >
-                            <button type="button" class="toggle-password" data-target="password">
+                            <button type="button" class="toggle-password" data-target="password" aria-label="Toggle password visibility">
                                 <i class="fa-regular fa-eye" style="color: #000000;"></i>
                             </button>
                         </div>
-                        <div id="passwordStrength" class="password-strength"></div>
+                        <div id="passwordStrength" class="password-strength" aria-live="polite"></div>
                     </div>
 
                     <div class="form-group">
@@ -41,23 +43,24 @@ include __DIR__ . '/../layouts/layout.php';
                                 class="form-input" 
                                 placeholder="ej: mario123%"
                                 required
+                                aria-describedby="confirmMessage"
                             >
-                            <button type="button" class="toggle-password" data-target="confirmPassword">
+                            <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Toggle password visibility">
                                 <i class="fa-regular fa-eye" style="color: #000000;"></i>
                             </button>
                         </div>
-                        <div id="confirmMessage" class="password-strength"></div>
+                        <div id="confirmMessage" class="password-strength" aria-live="polite"></div>
                     </div>
 
                     <button type="submit" class="register-btn">Registrar</button>
                 </form>
 
-                <div class="help-link">
+                <p class="help-link">
                     <a href="#" id="helpLink">¿Necesitas ayuda?</a>
-                </div>
+                </p>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
         // Toggle password visibility
