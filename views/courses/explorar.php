@@ -3,20 +3,19 @@ $projectRoot = $_SERVER['DOCUMENT_ROOT'] . '/portal_cursos';
 include $projectRoot . '/views/layouts/layout.php';
 ?>
 
-<main class="curzilla-main-content explore-page-container">
-    <nav class="category-nav">
-        <div class="category-container">
-            <button class="category-button active">Informática</button>
-            <button class="category-button">Software</button>
-            <button class="category-button">Contaduría</button>
-            <button class="category-button">Marketing</button>
-            <button class="category-button">Cocina</button>
-            <button class="category-button">Diseño</button>
-            <button class="category-button">Salud</button>
-            <button class="category-button">Desarrollo personal</button>
-            <button class="category-button">Música</button>
-        </div>
-    </nav>
+<nav class="category-nav">
+    <div class="category-container">
+        <button class="category-button active">Informática</button>
+        <button class="category-button">Software</button>
+        <button class="category-button">Contaduría</button>
+        <button class="category-button">Marketing</button>
+        <button class="category-button">Cocina</button>
+        <button class="category-button">Diseño</button>
+        <button class="category-button">Salud</button>
+        <button class="category-button">Desarrollo personal</button>
+        <button class="category-button">Música</button>
+    </div>
+</nav>
 
     <header class="explore-hero-section">
         <div class="explore-hero-content">
@@ -34,6 +33,7 @@ include $projectRoot . '/views/layouts/layout.php';
         </div>
     </header>
 
+<main class="curzilla-main-content explore-page-container">
     <div class="curzilla-container">
         <section class="explore-section">
             <h2 class="explore-section-title">¡Los mejores cursos de Informática Aquí!</h2>

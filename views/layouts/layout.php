@@ -52,7 +52,7 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
         
         <div class="nav-right user-menu">
             <?php if (isset($_SESSION['user_id'])): ?>
-                <span>Hola, <?php echo htmlspecialchars($_SESSION['user_nombre']); ?></span>
+                <span><?php echo htmlspecialchars($_SESSION['user_nombre']); ?></span>
                 <a href="/portal_cursos/public/auth_handler.php?action=logout" class="btn btn-secondary">Cerrar Sesión</a>
             <?php else: ?>
                 <a href="/portal_cursos/views/auth/registro.php" class="btn btn-primary">Regístrate</a>

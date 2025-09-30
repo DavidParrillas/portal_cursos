@@ -50,6 +50,8 @@ body {
     gap: 2rem;
 }
 
+
+
 .nav-center {
     display: flex;
     align-items: center;
@@ -169,9 +171,6 @@ body {
   left: 0;
   transform: translateY(-50%); /* Centered vertically, aligned left */
   width: 40%; /* Increased width to ensure it covers the desired area */
-  height: auto;
-  pointer-events: none;
-  z-index: -1; /* Sent to the background */
 }
 
 .hero-right h1 {
@@ -213,12 +212,8 @@ body {
 .course-bubble {
   background: #6366f1; color: white; padding: 1rem 2rem; border-radius: 30px; font-weight: bold;
   text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-  position: absolute;
-  top: 10px; /* Position it above the girl's head */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5; /* Ensure it's on top */
   width: max-content;
+  margin: 0 auto 1rem;
 }
 
 .hero-girl {
@@ -315,9 +310,9 @@ body {
         gap: 2rem; 
     }
 
-    .hero-right { order: 1; }
+    .hero-left { order: 1; }
     .hero-center { order: 2; }
-    .hero-left { order: 3; }
+    .hero-right { order: 3; }
 
     .hero-left img {
         transform: none;
@@ -326,7 +321,6 @@ body {
     }
 
     .hero-girl {
-        margin-top: 2rem;
         width: 280px;
     }
 
@@ -345,9 +339,6 @@ body {
     .hero {
         padding: 2rem 1rem;
     }
-    .hero-left {
-        display: none; /* Hide one image on small screens */
-    }
     .hero-right h1 {
         font-size: 1.8rem;
     }
@@ -356,7 +347,6 @@ body {
     }
     .hero-girl {
         width: 240px;
-        margin-top: 1rem;
     }
 }
 
@@ -652,7 +642,12 @@ body {
 
 .explore-page-container {
     background-color: white;
-    
+}
+
+.curzilla-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
 .explore-hero-section {
