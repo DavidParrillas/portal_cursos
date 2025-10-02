@@ -23,7 +23,6 @@ include __DIR__ . '/../layouts/layout.php';
     <section class="gc-container">
         <div class="gc-table-container">
             <table>
-                <caption>Listado de cursos y su estado</caption>
                 <thead>
                     <tr>
                         <th scope="col">Nombre del curso</th>

@@ -1,11 +1,6 @@
 <?php
-/**
- * AuthController
- *
- * Manages user authentication, including registration,
- * login, and logout.
- */
-class AuthController {
+
+class AutenticacionController {
     /**
      * @var PDO The database connection instance.
      */
@@ -20,13 +15,6 @@ class AuthController {
         $this->pdo = $pdo;
     }
 
-    /**
-     * Processes the registration request for a new user.
-     *
-     * Validates form data, checks if the email already exists,
-     * hashes the password, and creates the new record in the corresponding table
-     * (student or instructor).
-     */
     public function register() {
         // Collects form data from POST, with empty default values.
         $nombre_completo = $_POST['nombre'] ?? '';

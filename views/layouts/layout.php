@@ -44,7 +44,7 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
                 <?php if ($_SESSION['user_rol'] === 'instructor'): ?>
                     <a href="/portal_cursos/views/courses/crearCurso.php" class="nav-link">Crear Curso</a>
                 <?php elseif ($_SESSION['user_rol'] === 'administrador'): ?>
-                    <a href="/portal_cursos/views/courses/gestionCursos.php" class="nav-link">Gestionar Cursos</a>
+                    <a href="/portal_cursos/views/admin/gestionCursos.php" class="nav-link">Gestionar Cursos</a>
                     <a href="/portal_cursos/views/admin/gestionUsuario.php" class="nav-link">Gestionar Usuarios</a>
                 <?php endif; ?>
             <?php endif; ?>
@@ -52,7 +52,7 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
         
         <div class="nav-right user-menu">
             <?php if (isset($_SESSION['user_id'])): ?>
-                <span><?php echo htmlspecialchars($_SESSION['user_nombre']); ?></span>
+                <span class="user-name"><i class="fa-solid fa-circle-user"></i><?php echo htmlspecialchars($_SESSION['user_nombre']); ?></span>
                 <a href="/portal_cursos/public/auth_handler.php?action=logout" class="btn btn-secondary">Cerrar Sesión</a>
             <?php else: ?>
                 <a href="/portal_cursos/views/auth/registro.php" class="btn btn-primary">Regístrate</a>

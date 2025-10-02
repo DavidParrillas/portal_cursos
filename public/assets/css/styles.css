@@ -840,6 +840,19 @@ body {
     font-size: 14px;
 }
 
+.user-name {
+    font-weight: 500;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.user-name i {
+    margin-right: 8px;
+    color: #ffffff;
+}
+
 @media (max-width: 768px) {
     .gc-container {
         padding: 15px;
