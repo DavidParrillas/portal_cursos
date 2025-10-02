@@ -119,3 +119,21 @@ ALTER TABLE `pagos` ADD FOREIGN KEY (`id_inscripcion`) REFERENCES `inscripciones
 ALTER TABLE `resenas` ADD FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`);
 
 ALTER TABLE `resenas` ADD FOREIGN KEY (`id_estudiante`) REFERENCES `usuarios` (`id_usuario`);
+
+-- Inserción de datos iniciales para la tabla `roles`
+INSERT INTO `roles` (`codigo`, `nombre`) VALUES
+('estudiante', 'Estudiante'),
+('instructor', 'Instructor'),
+('administrador', 'Administrador');
+
+-- Puedes agregar un usuario administrador por defecto si lo deseas (opcional)
+-- Ejemplo para crear un administrador:
+-- 1. Inserta el usuario con una contraseña hasheada.
+--    REEMPLAZA 'tu_hash_generado_aqui' con el hash que creaste con el script generar_hash.php
+-- INSERT INTO `usuarios` (`nombre_completo`, `correo`, `contrasena_hash`, `estado`) VALUES ('Admin Curzilla', 'admin@curzilla.com', 'tu_hash_generado_aqui', 'ACTIVO');
+-- 2. Obtiene el ID del usuario recién creado.
+-- SET @id_admin = LAST_INSERT_ID();
+-- 3. Obtiene el ID del rol de administrador.
+-- SET @id_rol_admin = (SELECT id_rol FROM roles WHERE codigo = 'administrador');
+-- 4. Asigna el rol al usuario.
+-- INSERT INTO `usuarios_roles` (`id_usuario`, `id_rol`) VALUES (@id_admin, @id_rol_admin);

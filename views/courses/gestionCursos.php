@@ -1,5 +1,16 @@
 <?php 
 $pageTitle = "Gestión de Cursos - Curzilla";
+// Asegurarse de que el usuario esté autenticado y sea un administrador
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'administrador') {
+    // Redirigir a una página de acceso no autorizado o a la página de inicio
+    header('Location: /portal_cursos/index.php');
+    exit;
+}
+
 include __DIR__ . '/../layouts/layout.php';
 ?>
 <main>

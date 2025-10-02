@@ -43,14 +43,6 @@ include __DIR__ . '/../layouts/layout.php';
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="rol" class="form-label">Quiero registrarme como:</label>
-                    <select name="rol" id="rol" class="form-select">
-                        <option value="estudiante" selected>Estudiante</option>
-                        <option value="instructor">Instructor</option>
-                    </select>
-                </div>
-                
                 <button type="submit" class="register-btn">Crear Cuenta</button>
                 
                 <p class="login-link">

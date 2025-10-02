@@ -1,6 +1,13 @@
-<?php 
+<?php
 $pageTitle = "Crear Curso - Curzilla";
 include __DIR__ . '/../layouts/layout.php';
+
+// Asegurarse de que el usuario esté autenticado y sea un instructor
+if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
+    // Redirigir a una página de acceso no autorizado o a la página de inicio
+    header('Location: /portal_cursos/index.php');
+    exit;
+}
 ?>
 
 <!-- Main Content -->

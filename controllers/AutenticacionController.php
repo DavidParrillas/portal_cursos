@@ -32,7 +32,7 @@ class AuthController {
         $nombre_completo = $_POST['nombre'] ?? '';
         $correo = $_POST['correo'] ?? '';
         $contrasena = $_POST['contrasena'] ?? '';
-        $rol_codigo = $_POST['rol'] ?? 'estudiante'; // Role code from the form
+        $rol_codigo = 'estudiante'; // Por defecto, todos los registros son de estudiantes.
 
         // Validates that essential fields are not empty.
         if (empty($nombre_completo) || empty($correo) || empty($contrasena)) {
