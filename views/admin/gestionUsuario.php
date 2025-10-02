@@ -13,8 +13,8 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'administrador') 
 
 // Incluir la configuración de la base de datos y obtener los usuarios
 $users = [];
+$roles = [];
 try {
-    // La ruta al archivo de configuración de la base de datos
     require_once __DIR__ . '/../../config/database.php';
     $pdo = Database::getInstance();
 
@@ -24,6 +24,7 @@ try {
             u.id_usuario, 
             u.nombre_completo, 
             u.correo, 
+            r.id_rol,
             r.nombre as rol_nombre
         FROM usuarios u
         JOIN usuarios_roles ur ON u.id_usuario = ur.id_usuario
@@ -31,8 +32,11 @@ try {
         ORDER BY u.id_usuario ASC
     ");
     $users = $stmt->fetchAll();
+
+    // Obtener todos los roles disponibles para el selector
+    $stmtRoles = $pdo->query("SELECT id_rol, nombre FROM roles ORDER BY nombre ASC");
+    $roles = $stmtRoles->fetchAll();
 } catch (Exception $e) {
-    // En un entorno de producción, sería mejor registrar este error que mostrarlo
     echo "Error al cargar los usuarios: " . $e->getMessage();
 }
 
@@ -78,8 +82,14 @@ include __DIR__ . '/../layouts/layout.php';
                                 <td><?php echo htmlspecialchars($user['correo']); ?></td>
                                 <td><?php echo htmlspecialchars(ucfirst($user['rol_nombre'])); ?></td>
                                 <td class="action-buttons">
-                                    <a href="#" class="btn btn-secondary btn-sm">Editar</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <button class="btn btn-secondary btn-sm" 
+                                            onclick="abrirModalUsuario('editar', <?php echo $user['id_usuario']; ?>)">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" 
+                                            onclick="confirmarEliminar(<?php echo $user['id_usuario']; ?>, '<?php echo htmlspecialchars($user['nombre_completo']); ?>')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -90,3 +100,67 @@ include __DIR__ . '/../layouts/layout.php';
         </div>
     </section>
 </main>
+
+<!-- Modal para Crear/Editar Usuario -->
+<div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalUsuarioLabel">Crear Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            
+            <form id="formUsuario" novalidate>
+                <div class="modal-body">
+                    <input type="hidden" name="id_usuario" id="userId">
+                    <input type="hidden" name="accion" id="accionForm">
+                    
+                    <div class="mb-3">
+                        <label for="nombre_completo" class="form-label">Nombre Completo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" required>
+                        <div class="invalid-feedback">Por favor ingrese el nombre completo.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="correo" name="correo" required>
+                        <div class="invalid-feedback">Por favor ingrese un correo válido.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_rol" class="form-label">Rol <span class="text-danger">*</span></label>
+                        <select class="form-select" id="id_rol" name="id_rol" required>
+                            <option value="">Seleccione un rol...</option>
+                            <?php foreach ($roles as $rol): ?>
+                                <option value="<?php echo $rol['id_rol']; ?>">
+                                    <?php echo htmlspecialchars(ucfirst($rol['nombre'])); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <div class="invalid-feedback">Por favor seleccione un rol.</div>
+                    </div>
+                    
+                    <div class="mb-3" id="divContrasena">
+                        <label for="contrasena" class="form-label">
+                            Contraseña <span class="text-danger" id="asteriscoPassword">*</span>
+                        </label>
+                        <input type="password" class="form-control" id="contrasena" name="contrasena">
+                        <small class="text-muted" id="helpPassword">
+                            La contraseña debe tener al menos 8 caracteres.
+                        </small>
+                        <div class="invalid-feedback">La contraseña debe tener al menos 8 caracteres.</div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardar">
+                        <i class="fas fa-save"></i> Guardar Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
