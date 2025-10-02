@@ -6,5 +6,5 @@ class Review extends BaseModel {
     public $id_curso;
     public $comentario;
     public $calificacion;
-    public $fecha;
+    public $creado_en;
 }

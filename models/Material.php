@@ -3,8 +3,8 @@
 class Material extends BaseModel {
     public $id_material;
     public $id_curso;
-    public $id_instructor;
+    public $id_usuario;
     public $titulo;
-    public $archivo;
-    public $created_at;
+    public $ruta_archivo;
+    public $creado_en;
 }

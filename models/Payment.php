@@ -4,10 +4,11 @@ class Payment extends BaseModel {
     public $id_pago;
     public $id_inscripcion;
     public $proveedor;
-    public $transaction_id;
+    public $id_transaccion;
     public $monto;
     public $moneda;
     public $estado;
-    public $fecha_pago;
-    public $comprobante_url;
+    public $url_recibo;
+    public $creado_en;
+    public $actualizado_en;
 }

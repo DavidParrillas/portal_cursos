@@ -3,5 +3,5 @@
 class Categoria extends BaseModel {
     public $id_categoria;
     public $nombre;
-    public $descripcion;
+    public $slug;
 }

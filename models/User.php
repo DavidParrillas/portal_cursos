@@ -1,10 +1,11 @@
 <?php
-// Modelo para la tabla 'estudiante' (representado como User genérico)
+// Modelo para la tabla 'usuarios'
 class User extends BaseModel {
-    public $id_estudiante;
-    public $nombre;
+    public $id_usuario;
+    public $nombre_completo;
     public $correo;
-    public $contrasena;
-    public $created_at;
-    public $updated_at;
+    public $contrasena_hash;
+    public $estado;
+    public $creado_en;
+    public $actualizado_en;
 }

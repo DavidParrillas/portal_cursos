@@ -2,159 +2,167 @@
 /**
  * AuthController
  *
- * Gestiona la autenticación de usuarios, incluyendo el registro,
- * inicio de sesión y cierre de sesión.
+ * Manages user authentication, including registration,
+ * login, and logout.
  */
 class AuthController {
     /**
-     * @var PDO La instancia de la conexión a la base de datos.
+     * @var PDO The database connection instance.
      */
     private $pdo;
 
     /**
-     * Constructor de la clase.
+     * Class constructor.
      *
-     * @param PDO $pdo Una instancia de PDO para la conexión a la base de datos.
+     * @param PDO $pdo A PDO instance for database connection.
      */
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
     }
 
     /**
-     * Procesa la solicitud de registro de un nuevo usuario.
+     * Processes the registration request for a new user.
      *
-     * Valida los datos del formulario, verifica si el correo ya existe,
-     * hashea la contraseña y crea el nuevo registro en la tabla correspondiente
-     * (estudiante o instructor).
+     * Validates form data, checks if the email already exists,
+     * hashes the password, and creates the new record in the corresponding table
+     * (student or instructor).
      */
     public function register() {
-        // Recoge los datos del formulario POST, con valores por defecto vacíos.
-        $nombre = $_POST['nombre'] ?? '';
+        // Collects form data from POST, with empty default values.
+        $nombre_completo = $_POST['nombre'] ?? '';
         $correo = $_POST['correo'] ?? '';
         $contrasena = $_POST['contrasena'] ?? '';
-        $rol = $_POST['rol'] ?? 'estudiante';
+        $rol_codigo = $_POST['rol'] ?? 'estudiante'; // Role code from the form
 
-        // Valida que los campos esenciales no estén vacíos.
-        if (empty($nombre) || empty($correo) || empty($contrasena)) {
+        // Validates that essential fields are not empty.
+        if (empty($nombre_completo) || empty($correo) || empty($contrasena)) {
             $this->redirect_with_error('/views/auth/registro.php', 'Todos los campos son obligatorios.');
         }
 
-        // Valida que el correo no exista en ninguna de las tablas de usuario.
+        // Validates that the email does not exist in any of the user tables.
         if ($this->userExists($correo)) {
             $this->redirect_with_error('/views/auth/registro.php', 'El correo electrónico ya está registrado.');
         }
 
-        // Se eliminó el hasheo de contraseña.
-        // Determina en qué tabla se insertará el usuario según su rol.
-        $table = ($rol === 'instructor') ? 'instructor' : 'estudiante';
+        // Hashes the password for secure storage.
+        $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
         try {
-            // Prepara y ejecuta la consulta de inserción.
-            $stmt = $this->pdo->prepare("INSERT INTO $table (nombre, correo, contrasena) VALUES (?, ?, ?)");
-            $stmt->execute([$nombre, $correo, $contrasena]);
-            // Redirige a la página de login con un mensaje de éxito.
+            $this->pdo->beginTransaction();
+
+            // Prepares and executes the insertion query into the 'usuarios' table.
+            $stmt = $this->pdo->prepare("INSERT INTO usuarios (nombre_completo, correo, contrasena_hash) VALUES (?, ?, ?)");
+            $stmt->execute([$nombre_completo, $correo, $contrasena_hash]);
+            $id_usuario = $this->pdo->lastInsertId();
+
+            // Gets the ID of the selected role.
+            $stmt = $this->pdo->prepare("SELECT id_rol FROM roles WHERE codigo = ?");
+            $stmt->execute([$rol_codigo]);
+            $id_rol = $stmt->fetchColumn();
+
+            if (!$id_rol) {
+                throw new Exception("El rol especificado no es válido.");
+            }
+
+            // Inserts the relationship into the 'usuarios_roles' table.
+            $stmt = $this->pdo->prepare("INSERT INTO usuarios_roles (id_usuario, id_rol) VALUES (?, ?)");
+            $stmt->execute([$id_usuario, $id_rol]);
+
+            $this->pdo->commit();
+
+            // Redirects to the login page with a success message.
             header('Location: /portal_cursos/views/auth/login.php?status=success');
             exit();
-        } catch (PDOException $e) {
-            // En caso de error en la base de datos, redirige con un mensaje de error.
-            $this->redirect_with_error('/views/auth/registro.php', 'Error al registrar el usuario.');
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            // In case of a database error, redirects with an error message.
+            $this->redirect_with_error('/views/auth/registro.php', 'Error al registrar el usuario: ' . $e->getMessage());
         }
     }
 
     /**
-     * Procesa la solicitud de inicio de sesión.
+     * Processes the login request.
      *
-     * Valida las credenciales, busca al usuario en las tablas correspondientes
-     * y, si son correctas, establece las variables de sesión.
+     * Validates credentials, searches for the user in the corresponding tables,
+     * and if correct, sets the session variables.
      */
     public function login() {
-        // Recoge los datos del formulario POST.
+        // Collects form data from POST.
         $correo = $_POST['correo'] ?? '';
         $contrasena = $_POST['contrasena'] ?? '';
 
-        // Valida que los campos no estén vacíos.
+        // Validates that fields are not empty.
         if (empty($correo) || empty($contrasena)) {
             $this->redirect_with_error('/views/auth/login.php', 'Correo y contraseña son obligatorios.');
         }
 
-        // Busca al usuario por su correo electrónico en todas las tablas de roles.
+        // Searches for the user by their email address in all role tables.
         $user_data = $this->findUserByEmail($correo);
 
-        // Si el usuario existe y la contraseña es correcta (comparación en texto plano).
-        // ADVERTENCIA: Se eliminó la verificación segura con password_verify().
-        if ($user_data && $contrasena === $user_data['contrasena']) {
-            // ...establece las variables de sesión.
-            $_SESSION['user_id'] = $user_data['id'];
-            $_SESSION['user_nombre'] = $user_data['nombre'];
-            $_SESSION['user_rol'] = $user_data['rol'];
-            // Redirige al dashboard o página principal.
+        // If the user exists and the password is correct.
+        if ($user_data && password_verify($contrasena, $user_data['contrasena_hash'])) {
+            // ...sets the session variables.
+            $_SESSION['user_id'] = $user_data['id_usuario'];
+            $_SESSION['user_nombre'] = $user_data['nombre_completo'];
+            $_SESSION['user_rol'] = $user_data['rol_codigo']; // Assigns the role code
+            // Redirects to the dashboard or main page.
             header('Location: /portal_cursos/public/index.php');
             exit();
         } else {
-            // Si las credenciales son incorrectas, redirige con un error.
+            // If credentials are incorrect, redirects with an error.
             $this->redirect_with_error('/views/auth/login.php', 'Credenciales incorrectas.');
         }
     }
 
     /**
-     * Cierra la sesión del usuario.
+     * Logs out the user.
      *
-     * Destruye la sesión actual y redirige a la página de inicio.
+     * Destroys the current session and redirects to the home page.
      */
     public function logout() {
-        // Elimina todas las variables de sesión.
+        // Deletes all session variables.
         session_unset();
-        // Destruye la sesión.
+        // Destroys the session.
         session_destroy();
-        // Redirige a la página principal.
+        // Redirects to the main page.
         header('Location: /portal_cursos/public/index.php');
         exit();
     }
 
     /**
-     * Verifica si un usuario ya existe en la base de datos.
+     * Checks if a user already exists in the database.
      *
-     * @param string $correo El correo electrónico a verificar.
-     * @return bool True si el usuario existe, false en caso contrario.
+     * @param string $correo The email to check.
+     * @return bool True if the user exists, false otherwise.
      */
     private function userExists($correo) {
-        return $this->findUserByEmail($correo) !== null;
+        $stmt = $this->pdo->prepare("SELECT id_usuario FROM usuarios WHERE correo = ?");
+        $stmt->execute([$correo]);
+        return $stmt->fetch() !== false;
     }
 
     /**
-     * Busca un usuario por su correo electrónico en todas las tablas de roles.
+     * Finds a user by their email address in all role tables.
      *
-     * Itera sobre las tablas 'estudiante', 'instructor' y 'administrador' para
-     * encontrar una coincidencia.
-     *
-     * @param string $correo El correo electrónico del usuario a buscar.
-     * @return array|null Los datos del usuario si se encuentra, o null si no.
+     * @param string $correo The user's email to search for.
+     * @return array|null The user's data if found, or null if not.
      */
     private function findUserByEmail($correo) {
-        // Define las tablas de roles y sus respectivas columnas de ID.
-        $tables = ['estudiante' => 'id_estudiante', 'instructor' => 'id_instructor', 'administrador' => 'id_admin'];
-        foreach ($tables as $rol => $id_column) {
-            // Prepara la consulta para buscar en la tabla actual.
-            // Se añade el rol y se renombra la columna de ID para unificar la respuesta.
-            $stmt = $this->pdo->prepare("SELECT *, '$rol' as rol, $id_column as id FROM $rol WHERE correo = ?");
-            $stmt->execute([$correo]);
-            $user = $stmt->fetch();
-            // Si se encuentra el usuario, se retorna inmediatamente.
-            if ($user) {
-                return $user;
-            }
-        }
-        // Si no se encuentra en ninguna tabla, retorna null.
-        return null;
+        // Searches for the user in the 'usuarios' table and joins with 'roles' to get the role.
+        $stmt = $this->pdo->prepare("\n            SELECT u.*, r.codigo as rol_codigo\n            FROM usuarios u\n            JOIN usuarios_roles ur ON u.id_usuario = ur.id_usuario\n            JOIN roles r ON ur.id_rol = r.id_rol\n            WHERE u.correo = ?\n        ");
+        $stmt->execute([$correo]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ? $user : null;
     }
 
     /**
-     * Redirige al usuario a una ubicación específica con un mensaje de error.
+     * Redirects the user to a specific location with an error message.
      *
-     * El mensaje de error se almacena en la sesión para ser mostrado en la página de destino.
+     * The error message is stored in the session to be displayed on the destination page.
      *
-     * @param string $location La ruta a la que se redirigirá (ej. '/views/auth/login.php').
-     * @param string $message El mensaje de error a mostrar.
+     * @param string $location The path to redirect to (e.g., '/views/auth/login.php').
+     * @param string $message The error message to display.
      */
     private function redirect_with_error($location, $message) {
         $_SESSION['error_message'] = $message;

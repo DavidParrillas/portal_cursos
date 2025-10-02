@@ -4,6 +4,5 @@ class Enrollment extends BaseModel {
     public $id_inscripcion;
     public $id_curso;
     public $id_estudiante;
-    public $fecha_inscripcion;
-    public $estado;
+    public $fecha_inscrito;
 }
