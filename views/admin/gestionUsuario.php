@@ -56,7 +56,7 @@ include __DIR__ . '/../layouts/layout.php';
         <div class="gc-container">
             <!-- Action Buttons -->
             <div class="admin-actions" role="toolbar">
-                <a href="/portal_cursos/views/auth/registro.php" class="btn btn-primary">Agregar Nuevo Usuario</a>
+                <button type="button" class="btn btn-primary" onclick="abrirModalUsuario('crear')">Agregar Nuevo Usuario</button>
             </div>
             <div class="gc-table-container">
                 <table>
@@ -87,7 +87,7 @@ include __DIR__ . '/../layouts/layout.php';
                                         <i class="fas fa-edit"></i> Editar
                                     </button>
                                     <button class="btn btn-danger btn-sm" 
-                                            onclick="confirmarEliminar(<?php echo $user['id_usuario']; ?>, '<?php echo htmlspecialchars($user['nombre_completo']); ?>')">
+                                            onclick="confirmarEliminar(<?php echo $user['id_usuario']; ?>, '<?php echo htmlspecialchars(addslashes($user['nombre_completo'])); ?>')">
                                         <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </td>
@@ -103,7 +103,7 @@ include __DIR__ . '/../layouts/layout.php';
 
 <!-- Modal para Crear/Editar Usuario -->
 <div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalUsuarioLabel">Crear Usuario</h5>
@@ -164,3 +164,6 @@ include __DIR__ . '/../layouts/layout.php';
         </div>
     </div>
 </div>
+
+<!-- Script específico para la gestión de usuarios -->
+<script src="/portal_cursos/public/assets/js/gestion-usuarios.js?v=<?php echo time(); ?>"></script>

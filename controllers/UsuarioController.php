@@ -94,8 +94,8 @@ function crearUsuario($pdo) {
         
         // Insertar usuario
         $stmt = $pdo->prepare("
-            INSERT INTO usuarios (nombre_completo, correo, contrasena, fecha_registro) 
-            VALUES (?, ?, ?, NOW())
+            INSERT INTO usuarios (nombre_completo, correo, contrasena_hash) 
+            VALUES (?, ?, ?)
         ");
         $stmt->execute([$nombre, $correo, $hashContrasena]);
         $idUsuario = $pdo->lastInsertId();
@@ -180,7 +180,7 @@ function editarUsuario($pdo) {
             $hashContrasena = password_hash($contrasena, PASSWORD_BCRYPT);
             $stmt = $pdo->prepare("
                 UPDATE usuarios 
-                SET nombre_completo = ?, correo = ?, contrasena = ?
+                SET nombre_completo = ?, correo = ?, contrasena_hash = ?
                 WHERE id_usuario = ?
             ");
             $stmt->execute([$nombre, $correo, $hashContrasena, $idUsuario]);
