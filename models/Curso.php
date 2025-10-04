@@ -1,18 +1,18 @@
 <?php
-class Curso {
-    private $id_curso;
-    private $id_instructor;
-    private $titulo;
-    private $slug;
-    private $descripcion;
-    private $duracion;
-    private $modalidad;
-    private $precio;
-    private $fecha_inicio;
-    private $cupos;
-    private $estado;
-    private $creado_en;
-    private $actualizado_en;
+class Curso extends BaseModel {
+    protected $id_curso;
+    protected $id_instructor;
+    protected $titulo;
+    protected $slug;
+    protected $descripcion;
+    protected $duracion;
+    protected $modalidad;
+    protected $precio;
+    protected $fecha_inicio;
+    protected $cupos;
+    protected $estado;
+    protected $creado_en;
+    protected $actualizado_en;
     
     // Getters
     public function getIdCurso() {

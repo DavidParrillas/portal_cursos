@@ -1,9 +1,9 @@
 <?php
 
-class Rol {
-    private $id_rol;
-    private $codigo;
-    private $nombre;
+class Rol extends BaseModel {
+    protected $id_rol;
+    protected $codigo;
+    protected $nombre;
     
     // Getters
     public function getIdRol() {

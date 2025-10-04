@@ -1,9 +1,9 @@
 <?php
-class Inscripcion {
-    private $id_inscripcion;
-    private $id_curso;
-    private $id_estudiante;
-    private $fecha_inscrito;
+class Inscripcion extends BaseModel {
+    protected $id_inscripcion;
+    protected $id_curso;
+    protected $id_estudiante;
+    protected $fecha_inscrito;
     
     // Getters
     public function getIdInscripcion() {

@@ -1,9 +1,9 @@
 <?php
 // Modelo para la tabla 'categoria'
 class Categoria extends BaseModel {
-    public $id_categoria;
-    public $nombre;
-    public $slug;
+    protected $id_categoria;
+    protected $nombre;
+    protected $slug;
 
     // Getters
     public function getIdCategoria() {

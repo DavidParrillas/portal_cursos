@@ -1,11 +1,11 @@
 <?php
-class Resena {
-    private $id_resena;
-    private $id_curso;
-    private $id_estudiante;
-    private $calificacion;
-    private $comentario;
-    private $creado_en;
+class Resena extends BaseModel {
+    protected $id_resena;
+    protected $id_curso;
+    protected $id_estudiante;
+    protected $calificacion;
+    protected $comentario;
+    protected $creado_en;
     
     // Getters
     public function getIdResena() {

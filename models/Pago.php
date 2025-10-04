@@ -1,15 +1,15 @@
 <?php
-class Pago {
-    private $id_pago;
-    private $id_inscripcion;
-    private $proveedor;
-    private $estado;
-    private $monto;
-    private $moneda;
-    private $id_transaccion;
-    private $url_recibo;
-    private $creado_en;
-    private $actualizado_en;
+class Pago extends BaseModel {
+    protected $id_pago;
+    protected $id_inscripcion;
+    protected $proveedor;
+    protected $estado;
+    protected $monto;
+    protected $moneda;
+    protected $id_transaccion;
+    protected $url_recibo;
+    protected $creado_en;
+    protected $actualizado_en;
     
     // Getters
     public function getIdPago() {

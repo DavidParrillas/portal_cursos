@@ -1,11 +1,11 @@
 <?php
-class Material {
-    private $id_material;
-    private $id_curso;
-    private $id_usuario;
-    private $titulo;
-    private $ruta_archivo;
-    private $creado_en;
+class Material extends BaseModel {
+    protected $id_material;
+    protected $id_curso;
+    protected $id_usuario;
+    protected $titulo;
+    protected $ruta_archivo;
+    protected $creado_en;
     
     // Getters
     public function getIdMaterial() {

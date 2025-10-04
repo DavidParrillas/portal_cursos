@@ -1,13 +1,13 @@
 <?php
 // Modelo para la tabla 'usuarios'
 class Usuario extends BaseModel {
-    public $id_usuario;
-    public $nombre_completo;
-    public $correo;
-    public $contrasena_hash;
-    public $estado;
-    public $creado_en;
-    public $actualizado_en;
+    protected $id_usuario;
+    protected $nombre_completo;
+    protected $correo;
+    protected $contrasena_hash;
+    protected $estado;
+    protected $creado_en;
+    protected $actualizado_en;
 
     // Getters
     public function getIdUsuario() {
