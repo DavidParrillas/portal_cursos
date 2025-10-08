@@ -1,78 +1,156 @@
-/* curzilla.css - componentes prefijados curzilla extraídos de styles.css */
-
-.curzilla-header { background: linear-gradient(135deg, #a996ff 0%, #6c63ff 100%); padding: 12px 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-.curzilla-header-content { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 20px; }
-.curzilla-logo-img { height:32px; filter:brightness(0) invert(1); }
-.curzilla-nav { display:flex; align-items:center; gap:24px; }
-.curzilla-nav-link { color:white; text-decoration:none; font-weight:500; transition:opacity 0.2s; }
-.curzilla-nav-link:hover { opacity:0.8; }
-.curzilla-search-container { position:relative; display:flex; align-items:center; }
-.curzilla-search-input { padding:8px 40px 8px 12px; border:none; border-radius:20px; background:white; width:200px; font-size:14px; }
-.curzilla-search-btn { position:absolute; right:8px; background:none; border:none; cursor:pointer; font-size:16px; }
-.curzilla-dropdown-btn { background:none; border:none; color:white; font-weight:500; cursor:pointer; font-size:14px; }
-.curzilla-header-actions { display:flex; gap:12px; }
-.curzilla-icon-btn { background: rgba(255,255,255,0.2); border:none; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; transition: background-color 0.2s; }
-.curzilla-icon-btn:hover { background: rgba(255,255,255,0.3); }
-.curzilla-main-content { padding:40px 20px; }
-.curzilla-container { max-width:1200px; margin:0 auto; }
-.curzilla-page-title { font-size:24px; font-weight:600; margin-bottom:32px; color:#1d1b20; }
-.curzilla-course-form { background:white; padding:32px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08); }
-.curzilla-form-row { display:flex; gap:24px; margin-bottom:24px; }
-.curzilla-form-group { flex:1; margin-bottom:24px; }
-.curzilla-form-group label { display:block; margin-bottom:8px; font-weight:500; color:#49454f; }
-.curzilla-form-input { width:100%; padding:12px 16px; border:2px solid #d9d9d9; border-radius:8px; font-size:14px; transition:border-color 0.2s; }
-.curzilla-form-input:focus { outline:none; border-color:#6c63ff; }
-.curzilla-form-textarea { width:100%; padding:12px 16px; border:2px solid #d9d9d9; border-radius:8px; font-size:14px; resize:vertical; min-height:120px; font-family:inherit; }
-.curzilla-form-textarea:focus { outline:none; border-color:#6c63ff; }
-.curzilla-counter-input { display:flex; align-items:center; border:2px solid #d9d9d9; border-radius:8px; overflow:hidden; width:fit-content; }
-.curzilla-counter-btn { background:#f5f5f5; border:none; padding:8px 12px; cursor:pointer; font-size:16px; font-weight:bold; transition: background-color 0.2s; }
-.curzilla-counter-btn:hover { background:#e0e0e0; }
-.curzilla-counter-value { border:none; padding:8px 16px; text-align:center; width:60px; font-size:14px; font-weight:bold; }
-.curzilla-counter-value.curzilla-purple { background:#6c63ff; color:white; }
-.curzilla-counter-value:focus { outline:none; }
-.curzilla-duration-section { margin:32px 0; }
-.curzilla-section-title { display:flex; align-items:center; gap:8px; font-size:18px; font-weight:600; margin-bottom:20px; color:#1d1b20; }
-.curzilla-clock-icon { font-size:20px; }
-.curzilla-duration-controls { display:flex; gap:24px; flex-wrap:wrap; }
-.curzilla-duration-controls .curzilla-form-group { margin-bottom:0; }
-.curzilla-date-input { display:flex; gap:8px; }
-.curzilla-date-part { width:60px; padding:8px 12px; border:2px solid #d9d9d9; border-radius:8px; text-align:center; font-size:14px; }
-.curzilla-date-part:focus { outline:none; border-color:#6c63ff; }
-.curzilla-select-container { position:relative; }
-.curzilla-form-select { width:100%; padding:12px 16px; border:2px solid #d9d9d9; border-radius:8px; font-size:14px; background:white; cursor:pointer; }
-.curzilla-form-select:focus { outline:none; border-color:#6c63ff; }
-.curzilla-price-input { background:#f8f9fa; }
-.curzilla-upload-section { margin:32px 0; }
-.curzilla-upload-title { font-size:16px; font-weight:600; margin-bottom:16px; color:#1d1b20; }
-.curzilla-upload-area { border:2px dashed #d9d9d9; border-radius:12px; padding:40px 20px; text-align:center; background:#fafafa; transition: border-color 0.2s; }
-.curzilla-upload-area:hover { border-color:#6c63ff; }
-.curzilla-upload-content { display:flex; flex-direction:column; align-items:center; gap:12px; }
-.curzilla-upload-icon { font-size:32px; opacity:0.6; }
-.curzilla-upload-text { color:#666; font-size:14px; }
-.curzilla-upload-btn { background:#ff6a00; color:white; border:none; padding:10px 20px; border-radius:20px; font-weight:500; cursor:pointer; transition: background-color 0.2s; }
-.curzilla-upload-btn:hover { background:#e55a00; }
-.curzilla-course-content-section { background:#eaddff; border-radius:12px; padding:24px; margin:32px 0; }
-.curzilla-content-title { background:#6c63ff; color:white; padding:12px 24px; border-radius:8px; font-size:16px; font-weight:600; margin-bottom:20px; text-align:center; }
-.curzilla-content-item { background:white; border-radius:8px; padding:16px; display:flex; align-items:center; gap:16px; border:1px solid #d9d9d9; }
-.curzilla-content-icon { font-size:24px; width:40px; text-align:center; }
-.curzilla-content-details { flex:1; display:flex; flex-direction:column; gap:4px; }
-.curzilla-content-name { font-weight:500; color:#1d1b20; }
-.curzilla-content-duration { font-size:12px; color:#666; }
-.curzilla-content-files { display:flex; align-items:center; gap:8px; font-size:12px; color:#666; }
-.curzilla-file-link { color:#6c63ff; text-decoration:none; }
-.curzilla-file-link:hover { text-decoration:underline; }
-.curzilla-form-actions { display:flex; gap:16px; justify-content:center; margin-top:40px; }
-.curzilla-btn { padding:12px 32px; border-radius:24px; font-weight:500; cursor:pointer; transition:all 0.2s; border:2px solid transparent; font-size:14px; }
-.curzilla-btn-secondary { background:white; color:#6c63ff; border-color:#6c63ff; }
-.curzilla-btn-secondary:hover { background:#f5f3ff; }
-.curzilla-btn-primary { background:#6c63ff; color:white; border-color:#6c63ff; }
-.curzilla-btn-primary:hover { background:#5a52d5; }
-
-@media (max-width:768px) {
-    .curzilla-header-content { flex-direction:column; gap:16px; }
-    .curzilla-nav { flex-wrap:wrap; justify-content:center; }
-    .curzilla-form-row { flex-direction:column; }
-    .curzilla-duration-controls { flex-direction:column; }
-    .curzilla-course-form { padding:20px; }
-    .curzilla-container { padding:0 16px; }
+/* New styles for Course Management Table */
+.ct-container {
+    max-width: 1600px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
+
+.ct-table-wrapper {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.ct-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ct-table thead {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ct-table th {
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    text-align: left;
+    letter-spacing: 0.5px;
+}
+
+.ct-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ct-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.ct-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.ct-table td {
+    padding: 20px 24px;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #374151;
+}
+
+.ct-course-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.ct-course-thumbnail {
+    width: 100px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.ct-course-details strong {
+    display: block;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.ct-course-details small {
+    color: #6b7280;
+}
+
+.ct-instructor-info strong {
+    display: block;
+    font-weight: 500;
+}
+
+.ct-instructor-info small {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.ct-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ct-badge-enrolled {
+    background-color: #e0f2fe;
+    color: #0ea5e9;
+}
+
+.ct-badge-rating {
+    background-color: #fefce8;
+    color: #eab308;
+}
+
+.ct-badge-rating .fa-star {
+    color: #facc15;
+}
+
+.ct-badge-category {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    margin: 2px;
+}
+
+.ct-badge-status {
+    text-transform: capitalize;
+}
+
+.ct-badge-pendiente { background-color: #fef2e5; color: #f97316; }
+.ct-badge-publicado { background-color: #ecfdf5; color: #10b981; }
+.ct-badge-archivado { background-color: #f1f5f9; color: #64748b; }
+.ct-badge-borrador { background-color: #e2e8f0; color: #475569; }
+
+
+.ct-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.ct-action-btn {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ct-action-btn:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.ct-action-btn.approve:hover { color: #10b981; }
+.ct-action-btn.reject:hover { color: #ef4444; }
+.ct-action-btn.archive:hover { color: #f97316; }
+.ct-action-btn.publish:hover { color: #3b82f6; }
+.ct-action-btn.delete:hover { color: #ef4444; }

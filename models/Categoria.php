@@ -1,33 +1,119 @@
 <?php
-// Modelo para la tabla 'categoria'
-class Categoria extends BaseModel {
-    protected $id_categoria;
-    protected $nombre;
-    protected $slug;
+class Categoria {
+    private $pdo;
 
-    // Getters
-    public function getIdCategoria() {
-        return $this->id_categoria;
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
     }
-    
-    public function getNombre() {
-        return $this->nombre;
+
+    /**
+     * Obtener todas las categorías
+     */
+    public function obtenerTodas() {
+        $sql = "SELECT * FROM categorias ORDER BY nombre ASC";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function getSlug() {
-        return $this->slug;
+
+    /**
+     * Obtener una categoría por ID
+     */
+    public function obtenerPorId($idCategoria) {
+        $sql = "SELECT * FROM categorias WHERE id_categoria = :id_categoria";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_categoria' => $idCategoria]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    // Setters
-    public function setIdCategoria($id_categoria) {
-        $this->id_categoria = $id_categoria;
+
+    /**
+     * Obtener una categoría por slug
+     */
+    public function obtenerPorSlug($slug) {
+        $sql = "SELECT * FROM categorias WHERE slug = :slug";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':slug' => $slug]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    public function setNombre($nombre) {
-        $this->nombre = $nombre;
+
+    /**
+     * Crear una nueva categoría
+     */
+    public function crear($datos) {
+        $sql = "INSERT INTO categorias (nombre, slug) VALUES (:nombre, :slug)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':nombre' => $datos['nombre'],
+            ':slug' => $datos['slug']
+        ]);
+        return $this->pdo->lastInsertId();
     }
-    
-    public function setSlug($slug) {
-        $this->slug = $slug;
+
+    /**
+     * Actualizar una categoría
+     */
+    public function actualizar($idCategoria, $datos) {
+        $sql = "UPDATE categorias SET nombre = :nombre, slug = :slug 
+                WHERE id_categoria = :id_categoria";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':nombre' => $datos['nombre'],
+            ':slug' => $datos['slug'],
+            ':id_categoria' => $idCategoria
+        ]);
+    }
+
+    /**
+     * Eliminar una categoría
+     */
+    public function eliminar($idCategoria) {
+        // Primero eliminar las relaciones con cursos
+        $sql = "DELETE FROM cursos_categorias WHERE id_categoria = :id_categoria";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_categoria' => $idCategoria]);
+
+        // Luego eliminar la categoría
+        $sql = "DELETE FROM categorias WHERE id_categoria = :id_categoria";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([':id_categoria' => $idCategoria]);
+    }
+
+    /**
+     * Obtener categorías de un curso específico
+     */
+    public function obtenerPorCurso($idCurso) {
+        $sql = "SELECT c.* FROM categorias c
+                INNER JOIN cursos_categorias cc ON c.id_categoria = cc.id_categoria
+                WHERE cc.id_curso = :id_curso
+                ORDER BY c.nombre ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_curso' => $idCurso]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Contar cursos por categoría
+     */
+    public function contarCursos($idCategoria) {
+        $sql = "SELECT COUNT(*) FROM cursos_categorias WHERE id_categoria = :id_categoria";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_categoria' => $idCategoria]);
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Verificar si existe un slug
+     */
+    public function existeSlug($slug, $idCategoriaExcluir = null) {
+        $sql = "SELECT COUNT(*) FROM categorias WHERE slug = :slug";
+        $params = [':slug' => $slug];
+        
+        if ($idCategoriaExcluir !== null) {
+            $sql .= " AND id_categoria != :id_categoria";
+            $params[':id_categoria'] = $idCategoriaExcluir;
+        }
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchColumn() > 0;
     }
 }

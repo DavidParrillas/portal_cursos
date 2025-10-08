@@ -4,30 +4,37 @@ include __DIR__ . '/../layouts/layout.php';
 
 // Asegurarse de que el usuario esté autenticado y sea un instructor
 if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
-    // Redirigir a una página de acceso no autorizado o a la página de inicio
     header('Location: /portal_cursos/index.php');
     exit;
 }
+
+// Obtener categorías disponibles
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../models/Categoria.php';
+
+$pdo = Database::getInstance();
+$categoriaModel = new Categoria($pdo);
+$categorias = $categoriaModel->obtenerTodas();
 ?>
 
 <!-- Main Content -->
 <main class="curzilla-main-content">
     <section class="curzilla-container">
-        <h1 class="curzilla-page-title">Aquí puedes agregar el contenido de tu proyecto</h1>
-        
-        <form class="curzilla-course-form">
+        <h1 class="curzilla-page-title">Crear Nuevo Curso</h1>
+
+        <form class="curzilla-course-form" method="POST" action="/portal_cursos/controllers/CursoController.php?action=crear" enctype="multipart/form-data" id="form-crear-curso">
             <fieldset>
                 <legend class="sr-only">Detalles del Curso</legend>
                 <div class="curzilla-form-row">
                     <div class="curzilla-form-group">
                         <label for="course-title">Título del curso</label>
-                        <input type="text" id="course-title" class="curzilla-form-input">
+                        <input type="text" id="course-title" name="titulo" class="curzilla-form-input" required>
                     </div>
                     <div class="curzilla-form-group">
                         <label for="max-participants">Máximo de participantes</label>
                         <div class="curzilla-counter-input">
                             <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="max-participants">-</button>
-                            <input type="number" id="max-participants" value="0" class="curzilla-counter-value">
+                            <input type="number" id="max-participants" name="cupos" value="0" min="0" class="curzilla-counter-value" required>
                             <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="max-participants">+</button>
                         </div>
                     </div>
@@ -35,13 +42,25 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
 
                 <div class="curzilla-form-group">
                     <label for="course-description">Descripción del Curso</label>
-                    <textarea id="course-description" class="curzilla-form-textarea" rows="6"></textarea>
+                    <textarea id="course-description" name="descripcion" class="curzilla-form-textarea" rows="6" required></textarea>
+                </div>
+
+                <div class="curzilla-form-group">
+                    <label for="categorias">Categorías</label>
+                    <select id="categorias" name="categorias[]" class="curzilla-form-select" multiple required>
+                        <?php foreach ($categorias as $categoria): ?>
+                            <option value="<?= $categoria['id_categoria'] ?>">
+                                <?= htmlspecialchars($categoria['nombre']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <small>Mantén presionada la tecla Ctrl (o Cmd en Mac) para seleccionar múltiples categorías</small>
                 </div>
             </fieldset>
 
             <fieldset class="curzilla-duration-section">
                 <legend class="curzilla-section-title">
-                    <span class="curzilla-clock-icon" aria-hidden="true">🕐</span>
+                    <i class="fa-solid fa-clock"></i>
                     Duración del curso
                 </legend>
                 <div class="curzilla-duration-controls">
@@ -49,7 +68,7 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
                         <label for="sections">Secciones</label>
                         <div class="curzilla-counter-input">
                             <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="sections">-</button>
-                            <input type="number" id="sections" value="0" class="curzilla-counter-value curzilla-purple">
+                            <input type="number" id="sections" name="secciones" value="0" min="0" class="curzilla-counter-value curzilla-purple">
                             <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="sections">+</button>
                         </div>
                     </div>
@@ -58,7 +77,7 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
                         <label for="classes">Clases</label>
                         <div class="curzilla-counter-input">
                             <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="classes">-</button>
-                            <input type="number" id="classes" value="0" class="curzilla-counter-value curzilla-purple">
+                            <input type="number" id="classes" name="clases" value="0" min="0" class="curzilla-counter-value curzilla-purple">
                             <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="classes">+</button>
                         </div>
                     </div>
@@ -67,21 +86,14 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
                         <label for="hours">Horas</label>
                         <div class="curzilla-counter-input">
                             <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="hours">-</button>
-                            <input type="number" id="hours" value="0" class="curzilla-counter-value curzilla-purple">
+                            <input type="number" id="hours" name="horas" value="0" min="0" class="curzilla-counter-value curzilla-purple">
                             <button type="button" class="curzilla-counter-btn" data-action="increase" data-target="hours">+</button>
                         </div>
                     </div>
                     
                     <div class="curzilla-form-group">
-                        <p>Fecha de Inicio</p>
-                        <div class="curzilla-date-input">
-                            <label for="day" class="sr-only">Día</label>
-                            <input type="number" id="day" placeholder="02" class="curzilla-date-part" min="1" max="31">
-                            <label for="month" class="sr-only">Mes</label>
-                            <input type="number" id="month" placeholder="8" class="curzilla-date-part" min="1" max="12">
-                            <label for="year" class="sr-only">Año</label>
-                            <input type="number" id="year" placeholder="2025" class="curzilla-date-part" min="2024">
-                        </div>
+                        <label for="fecha-inicio">Fecha de Inicio</label>
+                        <input type="date" id="fecha-inicio" name="fecha_inicio" class="curzilla-form-input">
                     </div>
                 </div>
             </fieldset>
@@ -92,178 +104,76 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
                     <div class="curzilla-form-group">
                         <label for="modality">Modalidad</label>
                         <div class="curzilla-select-container">
-                            <select id="modality" class="curzilla-form-select">
+                            <select id="modality" name="modalidad" class="curzilla-form-select" required>
                                 <option value="">Selecciona</option>
-                                <option value="presencial">Presencial</option>
-                                <option value="online">En línea</option>
+                                <option value="PRESENCIAL">Presencial</option>
+                                <option value="VIRTUAL">Virtual</option>
+                                <option value="HIBRIDA">Híbrida</option>
                             </select>
                         </div>
                     </div>
                     <div class="curzilla-form-group">
                         <label for="price">
-                            <span class="curzilla-price-icon" aria-hidden="true">💰</span>
-                            Agrega el precio
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                            Precio
                         </label>
-                        <input type="text" id="price" placeholder="$0.00" class="curzilla-form-input curzilla-price-input">
+                        <input type="number" id="price" name="precio" placeholder="0.00" step="0.01" min="0" class="curzilla-form-input curzilla-price-input" required>
                     </div>
                 </div>
             </fieldset>
 
             <fieldset class="curzilla-upload-section">
-                <legend class="curzilla-upload-title">+ Agregar video</legend>
+                <legend class="curzilla-upload-title">+ Agregar videos de YouTube</legend>
+                <div id="videos-container">
+                    <div class="video-item">
+                        <div class="curzilla-form-group">
+                            <label>Título del video</label>
+                            <input type="text" name="videos[0][titulo]" class="curzilla-form-input" placeholder="Ejemplo: Introducción al curso">
+                        </div>
+                        <div class="curzilla-form-group">
+                            <label>URL de YouTube</label>
+                            <input type="url" name="videos[0][url]" class="curzilla-form-input" placeholder="https://www.youtube.com/watch?v=...">
+                        </div>
+                        <button type="button" class="curzilla-btn curzilla-btn-danger btn-remove-video" style="display: none;">Eliminar video</button>
+                    </div>
+                </div>
+                <button type="button" class="curzilla-btn curzilla-btn-secondary" id="btn-add-video">+ Agregar otro video</button>
+            </fieldset>
+
+            <fieldset class="curzilla-upload-section">
+                <legend class="curzilla-upload-title">+ Adjuntar archivos de apoyo</legend>
                 <div class="curzilla-upload-area">
                     <div class="curzilla-upload-content">
-                        <div class="curzilla-upload-icon" aria-hidden="true">☁️</div>
-                        <p class="curzilla-upload-text">Máximo: 1GB</p>
-                        <button type="button" class="curzilla-upload-btn">+ Subir video</button>
+                        <div class="curzilla-upload-icon" aria-hidden="true"><i class="fa-solid fa-file-arrow-up"></i></div>
+                        <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG (Máx: 5MB)</p>
+                        <input type="file" id="archivos" name="archivos[]" multiple accept=".pdf,.png,.jpg,.jpeg" style="display: none;">
+                        <button type="button" class="curzilla-upload-btn" onclick="document.getElementById('archivos').click()">+ Subir archivos</button>
                     </div>
+                    <div id="archivos-seleccionados"></div>
                 </div>
             </fieldset>
 
             <fieldset class="curzilla-upload-section">
-                <legend class="curzilla-upload-title">+ Adjuntar archivos</legend>
+                <legend class="curzilla-upload-title">+ Imagen de portada</legend>
                 <div class="curzilla-upload-area">
                     <div class="curzilla-upload-content">
-                        <div class="curzilla-upload-icon" aria-hidden="true">📁</div>
-                        <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG</p>
-                        <button type="button" class="curzilla-upload-btn">+ Subir archivo</button>
+                        <div class="curzilla-upload-icon" aria-hidden="true"><i class="fa-solid fa-file-arrow-up"></i></div>
+                        <p class="curzilla-upload-text">Archivos permitidos: PNG, JPG (Máx: 5MB)</p>
+                        <input type="file" id="portada" name="portada" accept=".png,.jpg,.jpeg" style="display: none;" required>
+                        <button type="button" class="curzilla-upload-btn" onclick="document.getElementById('portada').click()">+ Subir imagen</button>
                     </div>
+                    <div id="preview-portada"></div>
                 </div>
             </fieldset>
-
-            <fieldset class="curzilla-upload-section">
-                <legend class="curzilla-upload-title">+ Adjuntar una imagen para la portada</legend>
-                <div class="curzilla-upload-area">
-                    <div class="curzilla-upload-content">
-                        <div class="curzilla-upload-icon" aria-hidden="true">🖼️</div>
-                        <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG</p>
-                        <button type="button" class="curzilla-upload-btn">+ Subir archivo</button>
-                    </div>
-                </div>
-            </fieldset>
-
-            <section class="curzilla-course-content-section">
-                <h2 class="curzilla-content-title">Contenido del Curso</h2>
-                <div class="curzilla-content-item">
-                    <div class="curzilla-content-icon" aria-hidden="true">📺</div>
-                    <div class="curzilla-content-details">
-                        <span class="curzilla-content-name">Introducción curso python</span>
-                        <span class="curzilla-content-duration">Duración: 05:45</span>
-                    </div>
-                    <div class="curzilla-content-files">
-                        <span>Archivos subidos:</span>
-                        <a href="#" class="curzilla-file-link">Archivo adjunto</a>
-                    </div>
-                </div>
-            </section>
 
             <footer class="curzilla-form-actions">
-                <button type="button" class="curzilla-btn curzilla-btn-secondary">Limpiar</button>
-                <button type="submit" class="curzilla-btn curzilla-btn-primary">Guardar</button>
+                <button type="button" class="curzilla-btn curzilla-btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+                <button type="button" class="curzilla-btn curzilla-btn-secondary" name="estado" value="BORRADOR" onclick="guardarComo('BORRADOR')">Guardar como Borrador</button>
+                <button type="submit" class="curzilla-btn curzilla-btn-primary" name="estado" value="PENDIENTE">Enviar para Revisión</button>
             </footer>
+            <input type="hidden" name="estado" id="estado-curso" value="PENDIENTE">
         </form>
     </section>
 </main>
 
-
-<script>
-    // Counter functionality
-    document.addEventListener("DOMContentLoaded", () => {
-    // Handle counter buttons
-    const counterButtons = document.querySelectorAll(".counter-btn")
-
-    counterButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-        const action = this.dataset.action
-        const targetId = this.dataset.target
-        const input = document.getElementById(targetId)
-        let currentValue = Number.parseInt(input.value) || 0
-
-        if (action === "increase") {
-            currentValue++
-        } else if (action === "decrease" && currentValue > 0) {
-            currentValue--
-        }
-
-        input.value = currentValue
-        })
-    })
-
-    // Handle file uploads
-    const uploadButtons = document.querySelectorAll(".upload-btn")
-
-    uploadButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-        const input = document.createElement("input")
-        input.type = "file"
-        input.accept = ".pdf,.png,.jpg,.jpeg,.mp4,.mov"
-
-        input.addEventListener("change", (e) => {
-            const file = e.target.files[0]
-            if (file) {
-            console.log("[v0] File selected:", file.name)
-            // Here you would handle the file upload
-            alert(`Archivo seleccionado: ${file.name}`)
-            }
-        })
-
-        input.click()
-        })
-    })
-
-    // Handle form submission
-    const form = document.querySelector(".course-form")
-
-    form.addEventListener("submit", (e) => {
-        e.preventDefault()
-
-        // Collect form data
-        const formData = {
-        title: document.getElementById("course-title").value,
-        description: document.getElementById("course-description").value,
-        maxParticipants: document.getElementById("max-participants").value,
-        sections: document.getElementById("sections").value,
-        classes: document.getElementById("classes").value,
-        hours: document.getElementById("hours").value,
-        modality: document.getElementById("modality").value,
-        price: document.getElementById("price").value,
-        }
-
-        console.log("[v0] Form data:", formData)
-        alert("Curso guardado exitosamente!")
-    })
-
-    // Handle clear button
-    const clearButton = document.querySelector(".btn-secondary")
-
-    clearButton.addEventListener("click", () => {
-        if (confirm("¿Estás seguro de que quieres limpiar todos los campos?")) {
-        form.reset()
-
-        // Reset counters to 0
-        const counters = document.querySelectorAll(".counter-value")
-        counters.forEach((counter) => {
-            counter.value = "0"
-        })
-        }
-    })
-
-    // Handle modality dropdown display
-    const modalitySelect = document.getElementById("modality")
-
-    modalitySelect.addEventListener("change", function () {
-        console.log("[v0] Modality selected:", this.value)
-    })
-
-    // Format price input
-    const priceInput = document.getElementById("price")
-
-    priceInput.addEventListener("input", function () {
-        const value = this.value.replace(/[^\d.]/g, "")
-        if (value) {
-        this.value = "$" + value
-        }
-    })
-    })
-
-</script>
+<script src="/portal_cursos/public/assets/js/crear-curso.js"></script>
