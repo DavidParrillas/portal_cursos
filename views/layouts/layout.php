@@ -12,6 +12,11 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/portal_cursos/public/assets/css/curzilla.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="/portal_cursos/public/assets/css/styles.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="/portal_cursos/public/assets/css/crearCurso.css?v=<?php echo time(); ?>">
+    <!-- AlertifyJS CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <!-- AlertifyJS Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
 </head>
 <body>
 <header class="header">
@@ -31,15 +36,7 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
                 <button type="submit" class="search-btn" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
             
-            <div class="dropdown">
-                <button class="dropdown-btn">
-                    Mis Cursos <span aria-hidden="true">▼</span>
-                </button>
-                <div class="dropdown-content">
-                    <a href="/portal_cursos/views/courses/cursos.php">Cursos</a>
-                    <a href="/portal_cursos/views/courses/talleres.php">Talleres</a>
-                </div>
-            </div>
+            <a href="/portal_cursos/views/courses/cursos.php" class="nav-link">Mis Cursos</a>
 
             <?php if (isset($_SESSION['user_rol'])): ?>
                 <?php if ($_SESSION['user_rol'] === 'instructor'): ?>
@@ -103,6 +100,12 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
         }
     });
 </script>
+<main>
+    <?php echo $content; ?>
+</main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AlertifyJS -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
+</body>
 </html>

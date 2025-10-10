@@ -1,4 +1,6 @@
-<?php include __DIR__ . '/../views/layouts/layout.php'; ?>
+<?php 
+ob_start(); 
+?>
 
     <!-- Hero Section -->
     <header class="hero">
@@ -84,3 +86,7 @@
             </div>
         </section>
     </main>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../views/layouts/layout.php';
+?>

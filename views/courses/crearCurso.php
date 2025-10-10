@@ -1,6 +1,10 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 $pageTitle = "Crear Curso - Curzilla";
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 
 // Asegurarse de que el usuario esté autenticado y sea un instructor
 if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
@@ -30,7 +34,7 @@ $categorias = $categoriaModel->obtenerTodas();
                         <label for="course-title">Título del curso</label>
                         <input type="text" id="course-title" name="titulo" class="curzilla-form-input" required>
                     </div>
-                    <div class="curzilla-form-group">
+                    <div class="curzilla-form-group" id="participants-group">
                         <label for="max-participants">Máximo de participantes</label>
                         <div class="curzilla-counter-input">
                             <button type="button" class="curzilla-counter-btn" data-action="decrease" data-target="max-participants">-</button>
@@ -39,28 +43,28 @@ $categorias = $categoriaModel->obtenerTodas();
                         </div>
                     </div>
                 </div>
-
+                <br>
                 <div class="curzilla-form-group">
                     <label for="course-description">Descripción del Curso</label>
                     <textarea id="course-description" name="descripcion" class="curzilla-form-textarea" rows="6" required></textarea>
                 </div>
 
+                <br>
                 <div class="curzilla-form-group">
-                    <label for="categorias">Categorías</label>
-                    <select id="categorias" name="categorias[]" class="curzilla-form-select" multiple required>
+                    <label for="course-description">Categoría</label>
+                    <select id="id_categoria" name="id_categoria" class="curzilla-form-select" required>
+                        <option value="">Seleccionar categoría</option>
                         <?php foreach ($categorias as $categoria): ?>
                             <option value="<?= $categoria['id_categoria'] ?>">
                                 <?= htmlspecialchars($categoria['nombre']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <small>Mantén presionada la tecla Ctrl (o Cmd en Mac) para seleccionar múltiples categorías</small>
                 </div>
             </fieldset>
 
             <fieldset class="curzilla-duration-section">
                 <legend class="curzilla-section-title">
-                    <i class="fa-solid fa-clock"></i>
                     Duración del curso
                 </legend>
                 <div class="curzilla-duration-controls">
@@ -114,17 +118,16 @@ $categorias = $categoriaModel->obtenerTodas();
                     </div>
                     <div class="curzilla-form-group">
                         <label for="price">
-                            <i class="fa-solid fa-hand-holding-dollar"></i>
                             Precio
                         </label>
                         <input type="number" id="price" name="precio" placeholder="0.00" step="0.01" min="0" class="curzilla-form-input curzilla-price-input" required>
                     </div>
                 </div>
             </fieldset>
-
-            <fieldset class="curzilla-upload-section">
-                <legend class="curzilla-upload-title">+ Agregar videos de YouTube</legend>
-                <div id="videos-container">
+                        
+            <fieldset>
+                <legend class="curzilla-section-title">Agregar videos de YouTube</legend>
+                <div id="videos-container"  class="curzilla-upload-section">
                     <div class="video-item">
                         <div class="curzilla-form-group">
                             <label>Título del video</label>
@@ -139,10 +142,11 @@ $categorias = $categoriaModel->obtenerTodas();
                 </div>
                 <button type="button" class="curzilla-btn curzilla-btn-secondary" id="btn-add-video">+ Agregar otro video</button>
             </fieldset>
-
-            <fieldset class="curzilla-upload-section">
-                <legend class="curzilla-upload-title">+ Adjuntar archivos de apoyo</legend>
-                <div class="curzilla-upload-area">
+            
+            <fieldset >
+                <legend class="curzilla-section-title">Adjuntar archivos de apoyo</legend>
+                <div class="curzilla-upload-section">
+                    <div class="curzilla-upload-area">
                     <div class="curzilla-upload-content">
                         <div class="curzilla-upload-icon" aria-hidden="true"><i class="fa-solid fa-file-arrow-up"></i></div>
                         <p class="curzilla-upload-text">Archivos permitidos: PDF, PNG, JPG (Máx: 5MB)</p>
@@ -151,11 +155,13 @@ $categorias = $categoriaModel->obtenerTodas();
                     </div>
                     <div id="archivos-seleccionados"></div>
                 </div>
+                </div>
             </fieldset>
-
-            <fieldset class="curzilla-upload-section">
-                <legend class="curzilla-upload-title">+ Imagen de portada</legend>
-                <div class="curzilla-upload-area">
+            
+            <fieldset>
+                <legend class="curzilla-section-title">Imagen de portada</legend>
+                <div class="curzilla-upload-section">
+                    <div class="curzilla-upload-area">
                     <div class="curzilla-upload-content">
                         <div class="curzilla-upload-icon" aria-hidden="true"><i class="fa-solid fa-file-arrow-up"></i></div>
                         <p class="curzilla-upload-text">Archivos permitidos: PNG, JPG (Máx: 5MB)</p>
@@ -163,6 +169,7 @@ $categorias = $categoriaModel->obtenerTodas();
                         <button type="button" class="curzilla-upload-btn" onclick="document.getElementById('portada').click()">+ Subir imagen</button>
                     </div>
                     <div id="preview-portada"></div>
+                </div>
                 </div>
             </fieldset>
 
@@ -177,3 +184,7 @@ $categorias = $categoriaModel->obtenerTodas();
 </main>
 
 <script src="/portal_cursos/public/assets/js/crear-curso.js"></script>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>

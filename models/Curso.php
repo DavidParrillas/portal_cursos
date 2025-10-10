@@ -6,6 +6,13 @@ class Curso {
         $this->pdo = $pdo;
     }
 
+    public function obtenerPorId($idCurso) {
+        $sql = "SELECT * FROM cursos WHERE id_curso = :id_curso";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_curso' => $idCurso]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Crear un nuevo curso
      */
@@ -159,13 +166,13 @@ class Curso {
                     u.correo as instructor_correo,
                     COUNT(DISTINCT i.id_inscripcion) as total_inscritos,
                     AVG(r.calificacion) as promedio_calificacion,
-                    GROUP_CONCAT(DISTINCT cat.nombre SEPARATOR ', ') as categorias
+                    cat.nombre as categoria,
+                    cat.id_categoria as id_categoria
                 FROM cursos c
                 INNER JOIN usuarios u ON c.id_instructor = u.id_usuario
                 LEFT JOIN inscripciones i ON c.id_curso = i.id_curso
                 LEFT JOIN resenas r ON c.id_curso = r.id_curso
-                LEFT JOIN cursos_categorias cc ON c.id_curso = cc.id_curso
-                LEFT JOIN categorias cat ON cc.id_categoria = cat.id_categoria
+                LEFT JOIN categorias cat ON c.id_categoria = cat.id_categoria
                 WHERE 1=1";
 
         $params = [];
@@ -178,6 +185,11 @@ class Curso {
         if (!empty($filtros['busqueda'])) {
             $sql .= " AND (c.titulo LIKE :busqueda OR u.nombre_completo LIKE :busqueda)";
             $params[':busqueda'] = '%' . $filtros['busqueda'] . '%';
+        }
+
+        if (!empty($filtros['categoria'])) {
+            $sql .= " AND c.id_categoria = :categoria";
+            $params[':categoria'] = $filtros['categoria'];
         }
 
         $sql .= " GROUP BY c.id_curso ORDER BY c.creado_en DESC";
@@ -274,46 +286,29 @@ class Curso {
      * Eliminar permanentemente un curso y sus relaciones
      */
     public function eliminarPermanentemente($idCurso) {
-        try {
-            $this->pdo->beginTransaction();
+    try {
+        $this->pdo->beginTransaction();
 
-            // Eliminar materiales
-            $sql = "DELETE FROM materiales WHERE id_curso = :id_curso";
+        $queries = [
+            "DELETE FROM materiales WHERE id_curso = :id_curso",
+            "DELETE FROM resenas WHERE id_curso = :id_curso",
+            "DELETE FROM pagos WHERE id_inscripcion IN (SELECT id_inscripcion FROM inscripciones WHERE id_curso = :id_curso)",
+            "DELETE FROM inscripciones WHERE id_curso = :id_curso",
+            "DELETE FROM cursos_categorias WHERE id_curso = :id_curso",
+            "DELETE FROM cursos WHERE id_curso = :id_curso"
+        ];
+
+        foreach ($queries as $sql) {
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':id_curso' => $idCurso]);
+        }
 
-            // Eliminar reseñas
-            $sql = "DELETE FROM resenas WHERE id_curso = :id_curso";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id_curso' => $idCurso]);
-
-            // Eliminar pagos relacionados con inscripciones
-            $sql = "DELETE p FROM pagos p 
-                    INNER JOIN inscripciones i ON p.id_inscripcion = i.id_inscripcion 
-                    WHERE i.id_curso = :id_curso";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id_curso' => $idCurso]);
-
-            // Eliminar inscripciones
-            $sql = "DELETE FROM inscripciones WHERE id_curso = :id_curso";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id_curso' => $idCurso]);
-
-            // Eliminar relaciones con categorías
-            $sql = "DELETE FROM cursos_categorias WHERE id_curso = :id_curso";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id_curso' => $idCurso]);
-
-            // Eliminar el curso
-            $sql = "DELETE FROM cursos WHERE id_curso = :id_curso";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id_curso' => $idCurso]);
-
-            $this->pdo->commit();
-            return true;
+        $this->pdo->commit();
+        return true;
         } catch (Exception $e) {
             $this->pdo->rollBack();
             throw $e;
         }
     }
 }
+?>

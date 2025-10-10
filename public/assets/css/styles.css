@@ -916,6 +916,378 @@ body {
     }
 }
 
+/* ==========================================
+   MODAL DE CONFIRMACIÓN - ESTILOS ESPECÍFICOS
+   Estos estilos NO afectarán otros elementos
+   ========================================== */
+
+/* Overlay del modal */
+#modalConfirmacion.gc-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(3px);
+    z-index: 99999;
+    display: none; /* Por defecto oculto */
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: gc-modal-fadeIn 0.25s ease-out;
+}
+
+/* Animación de entrada del overlay */
+@keyframes gc-modal-fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Contenedor del modal */
+#modalConfirmacion .gc-modal-content {
+    background: #ffffff;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    animation: gc-modal-slideUp 0.3s ease-out;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Animación de entrada del contenido */
+@keyframes gc-modal-slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Header del modal */
+#modalConfirmacion .gc-modal-header {
+    color: #000000;
+    padding: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: none;
+}
+
+#modalConfirmacion .gc-modal-header h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: #000000;
+    line-height: 1.3;
+}
+
+/* Botón de cerrar */
+#modalConfirmacion .gc-modal-close {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    font-size: 1.75rem;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+    font-weight: 300;
+}
+
+#modalConfirmacion .gc-modal-close:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: rotate(90deg);
+}
+
+#modalConfirmacion .gc-modal-close:active {
+    transform: rotate(90deg) scale(0.95);
+}
+
+/* Cuerpo del modal */
+#modalConfirmacion .gc-modal-body {
+    padding: 2rem 1.75rem;
+    background: #ffffff;
+}
+
+#modalConfirmacion .gc-modal-body p {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #374151;
+}
+
+/* Footer del modal */
+#modalConfirmacion .gc-modal-footer {
+    padding: 1.25rem 1.75rem;
+    background-color: #f9fafb;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Botones del modal */
+#modalConfirmacion .gc-modal-footer .gc-btn {
+    padding: 0.65rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 100px;
+    justify-content: center;
+}
+
+#modalConfirmacion .gc-modal-footer .gc-btn-primary {
+    background: #667eea;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.25);
+}
+
+#modalConfirmacion .gc-modal-footer .gc-btn-secondary:hover {
+    background-color: #d1d5db;
+    transform: translateY(-1px);
+}
+
+#modalConfirmacion .gc-modal-footer .gc-btn-secondary:active {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 640px) {
+    #modalConfirmacion .gc-modal-content {
+        max-width: calc(100% - 2rem);
+        margin: 1rem;
+    }
+
+    #modalConfirmacion .gc-modal-header {
+        padding: 1.25rem 1.5rem;
+    }
+
+    #modalConfirmacion .gc-modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    #modalConfirmacion .gc-modal-close {
+        width: 34px;
+        height: 34px;
+        font-size: 1.5rem;
+    }
+
+    #modalConfirmacion .gc-modal-body {
+        padding: 1.5rem 1.5rem;
+    }
+
+    #modalConfirmacion .gc-modal-body p {
+        font-size: 0.95rem;
+    }
+
+    #modalConfirmacion .gc-modal-footer {
+        padding: 1rem 1.5rem;
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+    }
+
+    #modalConfirmacion .gc-modal-footer .gc-btn {
+        width: 100%;
+    }
+}
+
+/* ==========================================
+   LOADING OVERLAY (Para cuando procesa)
+   ========================================== */
+
+#gc-loader .gc-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+#gc-loader .gc-loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: gc-spinner-spin 0.8s linear infinite;
+}
+
+@keyframes gc-spinner-spin {
+    to { 
+        transform: rotate(360deg); 
+    }
+}
+
+#gc-loader .gc-loader-overlay p {
+    color: #ffffff;
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+/* ==========================================
+   NOTIFICACIONES TOAST
+   ========================================== */
+
+.gc-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 100001;
+    animation: gc-notif-slideInRight 0.3s ease-out;
+    min-width: 320px;
+    max-width: 480px;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes gc-notif-slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes gc-notif-slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(calc(100% + 20px));
+        opacity: 0;
+    }
+}
+
+.gc-notification i {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.gc-notification span {
+    flex: 1;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.gc-notification-close {
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    color: inherit;
+}
+
+.gc-notification-close:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Tipos de notificación */
+.gc-notification-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-left: 4px solid #10b981;
+}
+
+.gc-notification-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+}
+
+.gc-notification-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-left: 4px solid #f59e0b;
+}
+
+@media (max-width: 640px) {
+    .gc-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: calc(100% - 20px);
+    }
+}
+
+/* ==========================================
+   UTILIDADES ADICIONALES
+   ========================================== */
+
+/* Evitar scroll cuando el modal está abierto */
+body.gc-modal-open {
+    overflow: hidden;
+}
+
+/* Clase para ocultar elementos visualmente pero mantenerlos accesibles */
+.gc-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 .admin-actions { margin-bottom: 1.5rem; text-align: right; }
     .admin-table-container { overflow-x: auto; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
     .admin-table { width: 100%; border-collapse: collapse; }
@@ -928,3 +1300,4 @@ body {
     .admin-table .action-buttons .btn-danger:hover { background-color: #fecaca; }
     .admin-table .action-buttons .btn-secondary { background-color: #e5e7eb; color: #374151; border: none; }
     .admin-table .action-buttons .btn-secondary:hover { background-color: #d1d5db; }
+

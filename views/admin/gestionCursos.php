@@ -34,7 +34,7 @@ if (!empty($filtroBusqueda)) {
 // Obtener todos los cursos
 $cursos = $cursoModel->obtenerTodosParaAdmin($filtros);
 
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 ?>
 
 <main>
@@ -119,7 +119,7 @@ include __DIR__ . '/../layouts/layout.php';
                                 </td>
                                 <td>
                                     <div class="ct-actions">
-                                        <a href="ver_curso.php?id=<?= $curso['id_curso'] ?>" class="ct-action-btn" title="Ver detalles">
+                                        <a href="detalleCurso.php?id=<?= $curso['id_curso'] ?>" class="ct-action-btn" title="Ver detalles">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
 
@@ -175,7 +175,10 @@ include __DIR__ . '/../layouts/layout.php';
     </div>
 </div>
 
-<script src="/portal_cursos/assets/js/gestion-cursos.js"></script>
-
+<script src="/portal_cursos/public/assets/js/gestion-cursos.js?v=<?php echo time(); ?>"></script>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>
 </body>
 </html>

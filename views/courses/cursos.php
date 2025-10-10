@@ -1,6 +1,6 @@
 <?php 
 $pageTitle = "Crear Curso - Curzilla";
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 ?>
 
 <main class="courses-section">
@@ -20,3 +20,7 @@ include __DIR__ . '/../layouts/layout.php';
         </article>
     </section>
 </main>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>

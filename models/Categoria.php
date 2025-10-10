@@ -66,8 +66,8 @@ class Categoria {
      * Eliminar una categoría
      */
     public function eliminar($idCategoria) {
-        // Primero eliminar las relaciones con cursos
-        $sql = "DELETE FROM cursos_categorias WHERE id_categoria = :id_categoria";
+        // Establecer id_categoria a NULL en los cursos que tengan esta categoría
+        $sql = "UPDATE cursos SET id_categoria = NULL WHERE id_categoria = :id_categoria";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id_categoria' => $idCategoria]);
 
@@ -78,23 +78,22 @@ class Categoria {
     }
 
     /**
-     * Obtener categorías de un curso específico
+     * Obtener la categoría de un curso específico
      */
     public function obtenerPorCurso($idCurso) {
         $sql = "SELECT c.* FROM categorias c
-                INNER JOIN cursos_categorias cc ON c.id_categoria = cc.id_categoria
-                WHERE cc.id_curso = :id_curso
-                ORDER BY c.nombre ASC";
+                INNER JOIN cursos cu ON c.id_categoria = cu.id_categoria
+                WHERE cu.id_curso = :id_curso";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id_curso' => $idCurso]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
      * Contar cursos por categoría
      */
     public function contarCursos($idCategoria) {
-        $sql = "SELECT COUNT(*) FROM cursos_categorias WHERE id_categoria = :id_categoria";
+        $sql = "SELECT COUNT(*) FROM cursos WHERE id_categoria = :id_categoria";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id_categoria' => $idCategoria]);
         return $stmt->fetchColumn();

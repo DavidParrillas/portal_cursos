@@ -30,6 +30,7 @@ class AdminCursoController {
      * Aprobar un curso
      */
     public function aprobar() {
+        header('Content-Type: application/json');
         $this->verificarAdmin();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -97,6 +98,7 @@ class AdminCursoController {
      * Rechazar un curso
      */
     public function rechazar() {
+        header('Content-Type: application/json');
         $this->verificarAdmin();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -156,6 +158,7 @@ class AdminCursoController {
      * Archivar un curso
      */
     public function archivar() {
+        header('Content-Type: application/json');
         $this->verificarAdmin();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -200,6 +203,7 @@ class AdminCursoController {
      * Publicar un curso archivado
      */
     public function publicar() {
+        header('Content-Type: application/json');
         $this->verificarAdmin();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -244,6 +248,7 @@ class AdminCursoController {
      * Eliminar permanentemente un curso
      */
     public function eliminar() {
+        header('Content-Type: application/json');
         $this->verificarAdmin();
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -256,6 +261,10 @@ class AdminCursoController {
         }
 
         $data = json_decode(file_get_contents('php://input'), true);
+        if(!$data) {
+            $data = $_POST;
+        }
+
         $idCurso = $data['id_curso'] ?? null;
 
         if (!$idCurso) {
@@ -340,6 +349,7 @@ class AdminCursoController {
      * Obtener detalles de un curso
      */
     public function obtenerDetalles() {
+        header('Content-Type: application/json');
         $this->verificarAdmin();
 
         $idCurso = $_GET['id_curso'] ?? null;
@@ -390,4 +400,22 @@ class AdminCursoController {
             ]);
         }
     }
+}
+
+// Manejo de la acción solicitada
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+
+    $pdo = Database::getInstance();
+    $controller = new AdminCursoController($pdo);
+
+    if (method_exists($controller, $action)) {
+        $controller->$action();
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'mensaje' => 'Acción no válida']);
+    }
+} else {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'mensaje' => 'No se especificó ninguna acción']);
 }

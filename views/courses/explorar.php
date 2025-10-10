@@ -1,19 +1,21 @@
 <?php 
 $projectRoot = $_SERVER['DOCUMENT_ROOT'] . '/portal_cursos';
-include $projectRoot . '/views/layouts/layout.php';
+ob_start();
 ?>
 
 <nav class="category-nav">
     <div class="category-container">
-        <button class="category-button active">Informática</button>
-        <button class="category-button">Software</button>
-        <button class="category-button">Contaduría</button>
-        <button class="category-button">Marketing</button>
-        <button class="category-button">Cocina</button>
+        <button class="category-button active">Todas</button>
+        <button class="category-button">Tecnología</button>
+        <button class="category-button">Negocios</button>
         <button class="category-button">Diseño</button>
-        <button class="category-button">Salud</button>
-        <button class="category-button">Desarrollo personal</button>
-        <button class="category-button">Música</button>
+        <button class="category-button">Marketing</button>
+        <button class="category-button">Desarrollo Personal</button>
+        <button class="category-button">Idiomas</button>
+        <button class="category-button">Salud y Bienestar</button>
+        <button class="category-button">Artes</button>
+        <button class="category-button">Ciencias</button>
+        <button class="category-button">Educación</button>
     </div>
 </nav>
 
@@ -157,4 +159,8 @@ include $projectRoot . '/views/layouts/layout.php';
         setupCategoryNavigation();
     });
 </script>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>
 </body>

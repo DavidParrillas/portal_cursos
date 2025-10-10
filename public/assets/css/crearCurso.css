@@ -1,0 +1,704 @@
+/* ==========================================
+   CURZILLA - ESTILOS CREAR CURSO (OPTIMIZADO)
+   ========================================== */
+
+/* Variables CSS */
+:root {
+    /* Colores Primarios */
+    --curzilla-primary: #a997ff;
+    --curzilla-primary-dark: #7C3AED;
+    --curzilla-secondary: #A78BFA;
+    --curzilla-accent: #10B981;
+    --curzilla-accent-dark: #059669;
+    --curzilla-orange: #F97316;
+    --curzilla-orange-dark: #EA580C;
+    --curzilla-danger: #EF4444;
+    --curzilla-danger-dark: #DC2626;
+    
+    /* Escala de Grises */
+    --curzilla-gray-50: #F9FAFB;
+    --curzilla-gray-100: #F3F4F6;
+    --curzilla-gray-200: #E5E7EB;
+    --curzilla-gray-300: #D1D5DB;
+    --curzilla-gray-400: #9CA3AF;
+    --curzilla-gray-600: #4B5563;
+    --curzilla-gray-700: #374151;
+    --curzilla-gray-900: #111827;
+    --curzilla-white: #FFFFFF;
+    --curzilla-black: #000000;
+    
+    /* Espaciado */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 2.5rem;
+    
+    /* Bordes y Sombras */
+    --curzilla-border-radius: 12px;
+    --curzilla-border-radius-sm: 6px;
+    --curzilla-border-radius-md: 8px;
+    --curzilla-border-radius-lg: 20px;
+    --curzilla-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --curzilla-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    /* Transiciones */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}
+
+/* ==========================================
+   RESET Y BASE
+   ========================================== */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--curzilla-gray-50);
+    color: var(--curzilla-gray-900);
+    line-height: 1.6;
+}
+
+/* ==========================================
+   LAYOUT PRINCIPAL
+   ========================================== */
+
+.curzilla-main-content {
+    padding: var(--spacing-xl) var(--spacing-md);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.curzilla-container {
+    background-color: var(--curzilla-white);
+    border-radius: var(--curzilla-border-radius);
+    padding: var(--spacing-2xl);
+    box-shadow: var(--curzilla-shadow);
+}
+
+/* ==========================================
+   TIPOGRAFÍA
+   ========================================== */
+
+.curzilla-page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--curzilla-gray-900);
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--curzilla-gray-200);
+}
+
+.curzilla-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--curzilla-gray-900);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.curzilla-section-title i {
+    color: var(--curzilla-primary);
+}
+
+.curzilla-upload-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--curzilla-gray-700);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Utilidad para lectores de pantalla */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ==========================================
+   FORMULARIO
+   ========================================== */
+
+.curzilla-course-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    animation: fadeIn var(--transition-normal);
+}
+
+.curzilla-course-form fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Filas del formulario */
+.curzilla-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+/* Grupos del formulario */
+.curzilla-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.curzilla-form-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--curzilla-gray-700);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.curzilla-form-group label i {
+    color: var(--curzilla-accent);
+    font-size: 1rem;
+}
+
+.curzilla-form-group small {
+    font-size: 0.75rem;
+    color: var(--curzilla-gray-400);
+    margin-top: var(--spacing-xs);
+}
+
+/* ==========================================
+   INPUTS Y CONTROLES
+   ========================================== */
+
+.curzilla-form-input,
+.curzilla-form-textarea,
+.curzilla-form-select {
+    width: 100%;
+    padding: 0.75rem var(--spacing-md);
+    border: 1px solid var(--curzilla-gray-300);
+    border-radius: var(--curzilla-border-radius-md);
+    font-size: 0.95rem;
+    color: var(--curzilla-gray-900);
+    background-color: var(--curzilla-white);
+    transition: all var(--transition-fast);
+    outline: none;
+}
+
+.curzilla-form-input:focus,
+.curzilla-form-textarea:focus,
+.curzilla-form-select:focus {
+    border-color: var(--curzilla-primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.curzilla-form-input:disabled,
+.curzilla-form-textarea:disabled,
+.curzilla-form-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.curzilla-form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.curzilla-form-select[multiple] {
+    min-height: 150px;
+}
+
+.curzilla-price-input {
+    background-color: var(--curzilla-gray-50);
+    font-weight: 600;
+}
+
+/* ==========================================
+   COUNTER INPUT
+   ========================================== */
+
+.curzilla-counter-input {
+    display: flex;
+    align-items: stretch;
+    width: fit-content;
+    border: 2px solid var(--curzilla-black);
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.curzilla-counter-btn {
+    width: 50px;
+    height: 30px;
+    background-color: #F5F5F5;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+    color: var(--curzilla-black);
+}
+
+.curzilla-counter-btn:hover:not(:disabled) {
+    background-color: #E0E0E0;
+}
+
+.curzilla-counter-btn:active {
+    background-color: #D0D0D0;
+}
+
+.curzilla-counter-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.curzilla-counter-value {
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    border: none;
+    border-left: 2px solid var(--curzilla-black);
+    border-right: 2px solid var(--curzilla-black);
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #6C63FF;
+    color: var(--curzilla-white);
+}
+
+.curzilla-counter-value::-webkit-outer-spin-button,
+.curzilla-counter-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.curzilla-counter-value:focus {
+    outline: none;
+    background-color: #5A52E0;
+}
+
+#participants-group{
+    margin-left: auto;
+}
+
+#participants-group .curzilla-counter-value {
+    background-color: var(--curzilla-orange);
+}
+
+#participants-group .curzilla-counter-value:focus {
+    background-color: var(--curzilla-orange-dark);
+}
+
+/* ==========================================
+   SECCIÓN DE DURACIÓN
+   ========================================== */
+
+.curzilla-duration-section {
+    padding: var(--spacing-xl);
+    border-radius: var(--curzilla-border-radius);
+    border: 1px solid var(--curzilla-gray-200);
+}
+
+.curzilla-duration-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+}
+
+/* ==========================================
+   SELECT CONTAINER
+   ========================================== */
+
+.curzilla-select-container {
+    position: relative;
+    background-color: var(--curzilla-gray-50);
+    border: 1px solid var(--curzilla-gray-300);
+    border-radius: var(--curzilla-border-radius-md);
+}
+
+/* ==========================================
+   CATEGORÍAS
+   ========================================== */
+
+.curzilla-categoria-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.curzilla-categoria-select-container {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.curzilla-categoria-select-container .curzilla-form-select {
+    flex: 1;
+}
+
+.curzilla-btn-confirm-categories {
+    padding: 0.75rem var(--spacing-lg);
+    background-color: var(--curzilla-accent);
+    color: var(--curzilla-white);
+    border: none;
+    border-radius: var(--curzilla-border-radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    min-height: 46px;
+}
+
+.curzilla-btn-confirm-categories:hover:not(:disabled) {
+    background-color: var(--curzilla-accent-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--curzilla-shadow-lg);
+}
+
+.curzilla-btn-confirm-categories:active {
+    transform: translateY(0);
+}
+
+.curzilla-btn-confirm-categories:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.curzilla-btn-confirm-categories i {
+    font-size: 1rem;
+}
+
+/* Categorías seleccionadas */
+.curzilla-selected-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.curzilla-category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--curzilla-primary);
+    color: var(--curzilla-white);
+    border-radius: var(--curzilla-border-radius-lg);
+    font-size: 0.875rem;
+    font-weight: 500;
+    animation: slideIn var(--transition-fast);
+}
+
+.curzilla-category-tag button {
+    background: none;
+    border: none;
+    color: var(--curzilla-white);
+    cursor: pointer;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.curzilla-category-tag button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   SECCIÓN DE SUBIDA DE ARCHIVOS
+   ========================================== */
+
+.curzilla-upload-section {
+    border: 2px dashed var(--curzilla-gray-300);
+    border-radius: var(--curzilla-border-radius);
+    background-color: var(--curzilla-gray-50);
+}
+
+.curzilla-upload-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.curzilla-upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.curzilla-upload-icon {
+    font-size: 3rem;
+    color: var(--curzilla-gray-400);
+}
+
+.curzilla-upload-icon i {
+    color: var(--curzilla-gray-300);
+}
+
+.curzilla-upload-text {
+    color: var(--curzilla-gray-400);
+    font-size: 0.875rem;
+}
+
+.curzilla-upload-btn {
+    padding: 0.75rem var(--spacing-xl);
+    background-color: var(--curzilla-orange);
+    color: var(--curzilla-white);
+    border: none;
+    border-radius: var(--curzilla-border-radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.curzilla-upload-btn:hover:not(:disabled) {
+    background-color: var(--curzilla-orange-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--curzilla-shadow-lg);
+}
+
+.curzilla-upload-btn:active {
+    transform: translateY(0);
+}
+
+.curzilla-upload-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ==========================================
+   VIDEOS
+   ========================================== */
+
+#videos-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.video-item {
+    padding: var(--spacing-md);
+    margin: 2rem 2rem 2rem 2rem;
+    background-color: var(--curzilla-white);
+    border-radius: var(--curzilla-border-radius-md);
+    border: 1px solid var(--curzilla-gray-200);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* ==========================================
+   PREVIEW DE ARCHIVOS
+   ========================================== */
+
+#archivos-seleccionados,
+#preview-portada {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: var(--spacing-md);
+}
+
+.archivo-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--curzilla-white);
+    border: 1px solid var(--curzilla-gray-200);
+    border-radius: var(--curzilla-border-radius-sm);
+    font-size: 0.875rem;
+}
+
+.archivo-preview button {
+    background: none;
+    border: none;
+    color: var(--curzilla-danger);
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    transition: all var(--transition-fast);
+}
+
+.archivo-preview button:hover {
+    color: var(--curzilla-danger-dark);
+}
+
+/* ==========================================
+   BOTONES
+   ========================================== */
+
+.curzilla-btn {
+    padding: 0.75rem var(--spacing-xl);
+    border-radius: var(--curzilla-border-radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.curzilla-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.curzilla-btn-primary {
+    background-color: var(--curzilla-primary);
+    color: var(--curzilla-white);
+}
+
+.curzilla-btn-primary:hover:not(:disabled) {
+    background-color: var(--curzilla-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--curzilla-shadow-lg);
+}
+
+.curzilla-btn-secondary {
+    background-color: var(--curzilla-white);
+    color: var(--curzilla-gray-700);
+    border: 1px solid var(--curzilla-gray-300);
+}
+
+.curzilla-btn-secondary:hover:not(:disabled) {
+    background-color: var(--curzilla-gray-50);
+    border-color: var(--curzilla-gray-400);
+}
+
+.curzilla-btn-danger {
+    background-color: var(--curzilla-danger);
+    color: var(--curzilla-white);
+}
+
+.curzilla-btn-danger:hover:not(:disabled) {
+    background-color: var(--curzilla-danger-dark);
+}
+
+.curzilla-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   ACCIONES DEL FORMULARIO
+   ========================================== */
+
+.curzilla-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-xl);
+    border-top: 2px solid var(--curzilla-gray-200);
+}
+
+/* ==========================================
+   SCROLLBAR PERSONALIZADO
+   ========================================== */
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--curzilla-gray-100);
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--curzilla-gray-400);
+    border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--curzilla-gray-600);
+}
+
+/* ==========================================
+   ANIMACIONES
+   ========================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ==========================================
+   MEDIA QUERIES
+   ========================================== */
+
+@media (max-width: 768px) {
+    .curzilla-main-content {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+    
+    .curzilla-container {
+        padding: var(--spacing-lg);
+    }
+    
+    .curzilla-form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .curzilla-duration-controls {
+        grid-template-columns: 1fr;
+    }
+    
+    .curzilla-categoria-select-container {
+        flex-direction: column;
+    }
+    
+    .curzilla-btn-confirm-categories {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .curzilla-form-actions {
+        flex-direction: column;
+    }
+    
+    .curzilla-btn {
+        width: 100%;
+    }
+}

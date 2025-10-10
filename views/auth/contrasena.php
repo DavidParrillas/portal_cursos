@@ -1,6 +1,6 @@
 <?php 
 $pageTitle = "Crea una contraseña segura - Curzilla";
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 ?>
     <!-- Main Content -->
     <main class="main-content">
@@ -173,4 +173,8 @@ include __DIR__ . '/../layouts/layout.php';
             alert('Para crear una contraseña segura:\n\n• Usa al menos 8 caracteres\n• Incluye letras mayúsculas y minúsculas\n• Agrega números\n• Usa símbolos especiales (!@#$%^&*)\n• Evita información personal\n• No uses contraseñas comunes');
         });
     </script>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>
 </body>

@@ -39,8 +39,7 @@ try {
 } catch (Exception $e) {
     echo "Error al cargar los usuarios: " . $e->getMessage();
 }
-
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 ?>
 
 <!-- Main Content for User Management -->
@@ -66,7 +65,7 @@ include __DIR__ . '/../layouts/layout.php';
                             <th scope="col">Nombre</th>
                             <th scope="col">Correo Electrónico</th>
                             <th scope="col">Rol</th>
-                            <th scope="col">Acciones</th>
+                            <th scope="col" style="text-align: center;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -167,3 +166,7 @@ include __DIR__ . '/../layouts/layout.php';
 
 <!-- Script específico para la gestión de usuarios -->
 <script src="/portal_cursos/public/assets/js/gestion-usuarios.js?v=<?php echo time(); ?>"></script>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>

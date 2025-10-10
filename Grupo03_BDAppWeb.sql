@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-10-2025 a las 18:05:21
+-- Tiempo de generación: 10-10-2025 a las 17:23:41
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -38,17 +38,16 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id_categoria`, `nombre`, `slug`) VALUES
-(1, 'Desarrollo Web', 'desarrollo-web'),
-(2, 'Marketing Digital', 'marketing-digital'),
-(3, 'Diseño Gráfico', 'diseno-grafico'),
-(4, 'Negocios y Emprendimiento', 'negocios-y-emprendimiento'),
-(5, 'Fotografía y Video', 'fotografia-y-video'),
-(6, 'Música', 'musica'),
-(7, 'Desarrollo Personal', 'desarrollo-personal'),
-(8, 'Idiomas', 'idiomas'),
-(9, 'Cocina y Gastronomía', 'cocina-y-gastronomia'),
-(10, 'Fitness y Salud', 'fitness-y-salud'),
-(11, 'Tecnología y Programación', 'tecnologia-programacion');
+(1, 'Tecnología', 'tecnologia'),
+(2, 'Negocios', 'negocios'),
+(3, 'Diseño', 'diseno'),
+(4, 'Marketing', 'marketing'),
+(5, 'Desarrollo Personal', 'desarrollo-personal'),
+(6, 'Idiomas', 'idiomas'),
+(7, 'Salud y Bienestar', 'salud-bienestar'),
+(8, 'Artes', 'artes'),
+(9, 'Ciencias', 'ciencias'),
+(10, 'Educación', 'educacion');
 
 -- --------------------------------------------------------
 
@@ -70,18 +69,8 @@ CREATE TABLE `cursos` (
   `cupos` int(11) NOT NULL DEFAULT 0,
   `estado` enum('BORRADOR','PENDIENTE','PUBLICADO','ARCHIVADO') NOT NULL DEFAULT 'BORRADOR',
   `creado_en` datetime NOT NULL DEFAULT current_timestamp(),
-  `actualizado_en` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cursos_categorias`
---
-
-CREATE TABLE `cursos_categorias` (
-  `id_curso` int(11) NOT NULL,
-  `id_categoria` int(11) NOT NULL
+  `actualizado_en` datetime NOT NULL DEFAULT current_timestamp(),
+  `id_categoria` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -232,13 +221,7 @@ ALTER TABLE `categorias`
 ALTER TABLE `cursos`
   ADD PRIMARY KEY (`id_curso`),
   ADD UNIQUE KEY `slug` (`slug`),
-  ADD UNIQUE KEY `cursos_index_1` (`id_instructor`,`titulo`);
-
---
--- Indices de la tabla `cursos_categorias`
---
-ALTER TABLE `cursos_categorias`
-  ADD UNIQUE KEY `cursos_categorias_index_2` (`id_curso`,`id_categoria`),
+  ADD UNIQUE KEY `cursos_index_1` (`id_instructor`,`titulo`),
   ADD KEY `id_categoria` (`id_categoria`);
 
 --
@@ -308,7 +291,7 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `cursos`
 --
 ALTER TABLE `cursos`
-  MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `inscripciones`
@@ -320,7 +303,7 @@ ALTER TABLE `inscripciones`
 -- AUTO_INCREMENT de la tabla `materiales`
 --
 ALTER TABLE `materiales`
-  MODIFY `id_material` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_material` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
@@ -354,14 +337,8 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `cursos`
 --
 ALTER TABLE `cursos`
-  ADD CONSTRAINT `cursos_ibfk_1` FOREIGN KEY (`id_instructor`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `cursos_categorias`
---
-ALTER TABLE `cursos_categorias`
-  ADD CONSTRAINT `cursos_categorias_ibfk_1` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`),
-  ADD CONSTRAINT `cursos_categorias_ibfk_2` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`);
+  ADD CONSTRAINT `cursos_ibfk_1` FOREIGN KEY (`id_instructor`) REFERENCES `usuarios` (`id_usuario`),
+  ADD CONSTRAINT `cursos_ibfk_2` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON DELETE SET NULL;
 
 --
 -- Filtros para la tabla `inscripciones`
