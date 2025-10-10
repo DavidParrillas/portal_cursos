@@ -13,8 +13,16 @@ class Curso {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function obtenerPorInstructor($idInstructor) {
+        $sql = "SELECT * FROM cursos WHERE id_instructor = :id_instructor";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_instructor' => $idInstructor]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Crear un nuevo curso
+     * CORREGIDO: Incluye id_categoria directamente en el INSERT
      */
     public function crear($datos) {
         $sql = "INSERT INTO cursos (
@@ -27,7 +35,8 @@ class Curso {
                     precio, 
                     fecha_inicio, 
                     cupos, 
-                    estado
+                    estado,
+                    id_categoria
                 ) VALUES (
                     :id_instructor, 
                     :titulo, 
@@ -38,11 +47,12 @@ class Curso {
                     :precio, 
                     :fecha_inicio, 
                     :cupos, 
-                    :estado
+                    :estado,
+                    :id_categoria
                 )";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
+        $resultado = $stmt->execute([
             ':id_instructor' => $datos['id_instructor'],
             ':titulo' => $datos['titulo'],
             ':slug' => $datos['slug'],
@@ -52,8 +62,15 @@ class Curso {
             ':precio' => $datos['precio'],
             ':fecha_inicio' => $datos['fecha_inicio'],
             ':cupos' => $datos['cupos'],
-            ':estado' => $datos['estado']
+            ':estado' => $datos['estado'],
+            ':id_categoria' => $datos['id_categoria']
         ]);
+
+        if (!$resultado) {
+            throw new Exception("Error al insertar curso: " . implode(", ", $stmt->errorInfo()));
+        }
+
+        return $this->pdo->lastInsertId();
     }
 
     /**
@@ -283,28 +300,47 @@ class Curso {
     }
 
     /**
+     * CORREGIDO: Cambio de imagen_portada a portada
+     */
+    public function actualizarPortada($idCurso, $rutaPortada) {
+        $sql = "UPDATE cursos SET portada = :ruta_portada WHERE id_curso = :id_curso";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':ruta_portada' => $rutaPortada, 
+            ':id_curso' => $idCurso
+        ]);
+    }
+
+    public function existeSlug($slug) {
+        $sql = "SELECT COUNT(*) FROM cursos WHERE slug = :slug";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':slug' => $slug]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    /**
      * Eliminar permanentemente un curso y sus relaciones
      */
     public function eliminarPermanentemente($idCurso) {
-    try {
-        $this->pdo->beginTransaction();
+        try {
+            $this->pdo->beginTransaction();
 
-        $queries = [
-            "DELETE FROM materiales WHERE id_curso = :id_curso",
-            "DELETE FROM resenas WHERE id_curso = :id_curso",
-            "DELETE FROM pagos WHERE id_inscripcion IN (SELECT id_inscripcion FROM inscripciones WHERE id_curso = :id_curso)",
-            "DELETE FROM inscripciones WHERE id_curso = :id_curso",
-            "DELETE FROM cursos_categorias WHERE id_curso = :id_curso",
-            "DELETE FROM cursos WHERE id_curso = :id_curso"
-        ];
+            $queries = [
+                "DELETE FROM materiales WHERE id_curso = :id_curso",
+                "DELETE FROM resenas WHERE id_curso = :id_curso",
+                "DELETE FROM pagos WHERE id_inscripcion IN (SELECT id_inscripcion FROM inscripciones WHERE id_curso = :id_curso)",
+                "DELETE FROM inscripciones WHERE id_curso = :id_curso",
+                "DELETE FROM cursos_categorias WHERE id_curso = :id_curso",
+                "DELETE FROM cursos WHERE id_curso = :id_curso"
+            ];
 
-        foreach ($queries as $sql) {
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id_curso' => $idCurso]);
-        }
+            foreach ($queries as $sql) {
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([':id_curso' => $idCurso]);
+            }
 
-        $this->pdo->commit();
-        return true;
+            $this->pdo->commit();
+            return true;
         } catch (Exception $e) {
             $this->pdo->rollBack();
             throw $e;

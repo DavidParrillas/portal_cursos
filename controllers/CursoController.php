@@ -44,6 +44,9 @@ class CursoController {
             // Construir la duración
             $duracion = $this->construirDuracion($_POST);
 
+            // CORREGIDO: Tomar solo la primera categoría del array
+            $idCategoria = !empty($_POST['categorias']) ? intval($_POST['categorias'][0]) : null;
+
             // Preparar datos del curso
             $datosCurso = [
                 'id_instructor' => $_SESSION['user_id'],
@@ -55,18 +58,12 @@ class CursoController {
                 'precio' => floatval($_POST['precio']),
                 'fecha_inicio' => !empty($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : null,
                 'cupos' => intval($_POST['cupos']),
-                'estado' => $_POST['estado'] ?? 'PENDIENTE'
+                'estado' => $_POST['estado'] ?? 'PENDIENTE',
+                'id_categoria' => $idCategoria
             ];
 
             // Crear el curso
             $idCurso = $this->cursoModel->crear($datosCurso);
-
-            // Asignar categorías
-            if (!empty($_POST['categorias'])) {
-                foreach ($_POST['categorias'] as $idCategoria) {
-                    $this->cursoModel->asignarCategoria($idCurso, intval($idCategoria));
-                }
-            }
 
             // Subir imagen de portada
             if (isset($_FILES['portada']) && $_FILES['portada']['error'] === UPLOAD_ERR_OK) {
@@ -117,7 +114,7 @@ class CursoController {
         }
 
         // Verificar si el título ya existe para este instructor
-        if ($this->cursoModel->existeTituloPorInstructor(trim($post['titulo']), $_SESSION['user_id'])) {
+        if (!empty($post['titulo']) && $this->cursoModel->existeTituloPorInstructor(trim($post['titulo']), $_SESSION['user_id'])) {
             $errores[] = 'Ya tienes un curso con este título. Por favor, elige otro.';
         }
 
@@ -137,7 +134,8 @@ class CursoController {
             $errores[] = 'Los cupos deben ser mayor o igual a 0';
         }
 
-        if (empty($post['categorias'])) {
+        // CORREGIDO: Validar que haya al menos una categoría
+        if (empty($post['categorias']) || !is_array($post['categorias'])) {
             $errores[] = 'Debes seleccionar al menos una categoría';
         }
 
@@ -251,7 +249,6 @@ class CursoController {
 
 // Procesar la petición
 if (isset($_GET['action'])) {
-    // Es necesario inicializar la conexión a la base de datos aquí
     $pdo = Database::getInstance();
     $controller = new CursoController($pdo);
     $action = $_GET['action'];

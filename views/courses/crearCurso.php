@@ -51,8 +51,8 @@ $categorias = $categoriaModel->obtenerTodas();
 
                 <br>
                 <div class="curzilla-form-group">
-                    <label for="course-description">Categoría</label>
-                    <select id="id_categoria" name="id_categoria" class="curzilla-form-select" required>
+                    <label for="categorias">Categoría</label>
+                    <select id="categorias" name="categorias[]" class="curzilla-form-select" required>
                         <option value="">Seleccionar categoría</option>
                         <?php foreach ($categorias as $categoria): ?>
                             <option value="<?= $categoria['id_categoria'] ?>">

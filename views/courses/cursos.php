@@ -1,10 +1,10 @@
 <?php 
-$pageTitle = "Crear Curso - Curzilla";
+$pageTitle = "Cursos - Curzilla";
 ob_start();
 ?>
 
 <main class="courses-section">
-    <h2 class="courses-title">Cursos Disponibles</h2>
+    <h2 class="courses-title">Tus Cursos</h2>
     <section class="courses-grid">
         <!-- Curso 1 -->
         <article class="course-card">

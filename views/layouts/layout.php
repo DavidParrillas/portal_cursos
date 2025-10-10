@@ -40,6 +40,7 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
 
             <?php if (isset($_SESSION['user_rol'])): ?>
                 <?php if ($_SESSION['user_rol'] === 'instructor'): ?>
+                    <a href="/portal_cursos/views/instructor/dashboard.php" class="nav-link">Panel Cursos</a>
                     <a href="/portal_cursos/views/courses/crearCurso.php" class="nav-link">Crear Curso</a>
                 <?php elseif ($_SESSION['user_rol'] === 'administrador'): ?>
                     <a href="/portal_cursos/views/admin/gestionCursos.php" class="nav-link">Gestionar Cursos</a>

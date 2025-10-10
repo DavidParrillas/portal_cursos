@@ -513,10 +513,11 @@ body {
 
 #archivos-seleccionados,
 #preview-portada {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
     margin-top: var(--spacing-md);
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
 }
 
 .archivo-preview {

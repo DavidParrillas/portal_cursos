@@ -33,59 +33,112 @@ ob_start();
         </div>
     </header>
 
+    
     <main>
         <!-- Courses Section -->
         <section class="courses-section">
-            <h2 class="courses-title">Todas las habilidad que necesitas en un unico Lugar!</h2>
+            <h2 class="courses-title">Todas las habilidades que necesitas en un unico Lugar!</h2>
             
             <div class="courses-grid">
-                <article class="course-card">
-                    <img src="/portal_cursos/public/assets/img/placeholders/dan-nelson-AvSFPw5Tp68-unsplash%201.png" alt="Abstract image representing Cyber Security." class="course-image">
-                    <div class="course-content">
-                        <h3 class="course-title">Ciber Seguridad</h3>
-                        <footer class="course-stats">
-                            <div class="rating">
-                                <span class="star" aria-hidden="true">⭐</span>
-                                <span>4,5</span>
-                            </div>
-                            <span>16K calificaciones</span>
-                            <span>Horas totales: 51.7</span>
-                        </footer>
+                <?php if (empty($ultimosCursos)): ?>
+                    <div class="no-courses">
+                        <p>No hay cursos disponibles en este momento.</p>
+                        <p>¡Pronto tendremos nuevos cursos para ti!</p>
                     </div>
-                </article>
-                
-                <article class="course-card">
-                    <img src="/portal_cursos/public/assets/img/placeholders/james-harrison-vpOeXr5wmR4-unsplash%201.png" alt="A laptop showing code, representing programming from scratch." class="course-image">
-                    <div class="course-content">
-                        <h3 class="course-title">Programación desde cero</h3>
-                        <footer class="course-stats">
-                            <div class="rating">
-                                <span class="star" aria-hidden="true">⭐</span>
-                                <span>4,7</span>
+                <?php else: ?>
+                    <?php foreach ($ultimosCursos as $curso): ?>
+                        <article class="course-card">
+                            <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>" class="course-link">
+                                <img 
+                                    src="<?= !empty($curso['portada']) ? htmlspecialchars($curso['portada']) : '/portal_cursos/public/assets/img/placeholders/course-default.png' ?>" 
+                                    alt="<?= htmlspecialchars($curso['titulo']) ?>" 
+                                    class="course-image"
+                                    onerror="this.src='/portal_cursos/public/assets/img/placeholders/course-default.png'"
+                                >
+                            </a>
+                            <div class="course-content">
+                                <div class="course-header">
+                                    <?php if (!empty($curso['categoria'])): ?>
+                                        <span class="course-category"><?= htmlspecialchars($curso['categoria']) ?></span>
+                                    <?php endif; ?>
+                                    
+                                    <span class="course-modality <?= strtolower($curso['modalidad']) ?>">
+                                        <?= htmlspecialchars($curso['modalidad']) ?>
+                                    </span>
+                                </div>
+                                
+                                <h3 class="course-title">
+                                    <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>">
+                                        <?= htmlspecialchars($curso['titulo']) ?>
+                                    </a>
+                                </h3>
+                                
+                                <p class="course-instructor">
+                                    <i class="fa-solid fa-chalkboard-user"></i>
+                                    <?= htmlspecialchars($curso['instructor']) ?>
+                                </p>
+                                
+                                <footer class="course-stats">
+                                    <div class="rating">
+                                        <span class="star" aria-hidden="true">⭐</span>
+                                        <span class="rating-value"><?= number_format($curso['promedio_calificacion'], 1) ?></span>
+                                        <span class="rating-count">
+                                            (<?php 
+                                            $totalResenas = $curso['total_resenas'];
+                                            if ($totalResenas >= 1000) {
+                                                echo number_format($totalResenas / 1000, 1) . 'K';
+                                            } else {
+                                                echo $totalResenas;
+                                            }
+                                            ?>)
+                                        </span>
+                                    </div>
+                                    
+                                    <?php if (!empty($curso['duracion'])): ?>
+                                        <span class="course-duration">
+                                            <i class="fa-regular fa-clock"></i>
+                                            <?= htmlspecialchars($curso['duracion']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    
+                                    <?php if ($curso['total_inscritos'] > 0): ?>
+                                        <span class="course-students">
+                                            <i class="fa-solid fa-users"></i>
+                                            <?= $curso['total_inscritos'] ?> <?= $curso['total_inscritos'] == 1 ? 'estudiante' : 'estudiantes' ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </footer>
+                                
+                                <div class="course-footer">
+                                    <div class="course-price">
+                                        <?php if ($curso['precio'] > 0): ?>
+                                            <span class="price">Q<?= number_format($curso['precio'], 2) ?></span>
+                                        <?php else: ?>
+                                            <span class="price free">Gratis</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    
+                                    <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>" class="btn-ver-curso">
+                                        Ver curso
+                                    </a>
+                                </div>
                             </div>
-                            <span>18K calificaciones</span>
-                            <span>Horas totales: 53.6</span>
-                        </footer>
-                    </div>
-                </article>
-                
-                <article class="course-card">
-                    <img src="/portal_cursos/public/assets/img/placeholders/hitesh-choudhary-D9Zow2REm8U-unsplash%201.png" alt="A screen with Python code, representing the Python language course." class="course-image">
-                    <div class="course-content">
-                        <h3 class="course-title">Lenguaje python</h3>
-                        <footer class="course-stats">
-                            <div class="rating">
-                                <span class="star" aria-hidden="true">⭐</span>
-                                <span>4,7</span>
-                            </div>
-                            <span>101K calificaciones</span>
-                            <span>Horas totales: 161.1</span>
-                        </footer>
-                    </div>
-                </article>
+                        </article>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
+            
+            <?php if (!empty($ultimosCursos)): ?>
+                <div class="ver-todos-cursos">
+                    <a href="/portal_cursos/views/courses/cursos.php" class="btn-ver-todos">
+                        Ver todos los cursos
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            <?php endif; ?>
         </section>
     </main>
+
 <?php
 $content = ob_get_clean();
 include __DIR__ . '/../views/layouts/layout.php';

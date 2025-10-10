@@ -35,62 +35,11 @@ ob_start();
         </div>
     </header>
 
-<main class="curzilla-main-content explore-page-container">
+<main class="curzilla-main-content-explore-page-container">
     <div class="curzilla-container">
         <section class="explore-section">
-            <h2 class="explore-section-title">¡Los mejores cursos de Informática Aquí!</h2>
-            
-            <h3 class="explore-subsection-title">+ Mas vendidos</h3>
-            <div class="courses-grid">
-                <article class="course-card">
-                    <img src="/portal_cursos/public/assets/img/placeholders/dan-nelson-AvSFPw5Tp68-unsplash%201.png" alt="Cyber Seguridad" class="course-image">
-                    <div class="course-content">
-                        <h4 class="course-title">Ciber Seguridad</h4>
-                        <footer class="course-stats">
-                            <div class="rating">
-                                <span class="star" aria-hidden="true">⭐</span>
-                                <span>4,5</span>
-                            </div>
-                            <span>16K calificaciones</span>
-                            <span>Horas totales: 51.7</span>
-                        </footer>
-                    </div>
-                </article>
-                
-                <article class="course-card">
-                    <img src="/portal_cursos/public/assets/img/placeholders/james-harrison-vpOeXr5wmR4-unsplash%201.png" alt="Programación desde cero" class="course-image">
-                    <div class="course-content">
-                        <h4 class="course-title">Programación desde cero</h4>
-                        <footer class="course-stats">
-                            <div class="rating">
-                                <span class="star" aria-hidden="true">⭐</span>
-                                <span>4,7</span>
-                            </div>
-                            <span>18K calificaciones</span>
-                            <span>Horas totales: 53.6</span>
-                        </footer>
-                    </div>
-                </article>
-                
-                <article class="course-card">
-                    <img src="/portal_cursos/public/assets/img/placeholders/hitesh-choudhary-D9Zow2REm8U-unsplash%201.png" alt="Lenguaje python" class="course-image">
-                    <div class="course-content">
-                        <h4 class="course-title">Lenguaje python</h4>
-                        <footer class="course-stats">
-                            <div class="rating">
-                                <span class="star" aria-hidden="true">⭐</span>
-                                <span>4,7</span>
-                            </div>
-                            <span>101K calificaciones</span>
-                            <span>Horas totales: 161.1</span>
-                        </footer>
-                    </div>
-                </article>
-            </div>
-        </section>
+            <h2 class="explore-section-title">¡Los mejores cursos!</h2>
 
-        <section class="explore-section">
-            <h3 class="explore-subsection-title">Recomendados</h3>
             <div class="courses-grid">
                 <article class="course-card">
                     <img src="/portal_cursos/public/assets/img/placeholders/dan-nelson-AvSFPw5Tp68-unsplash%201.png" alt="Cyber Seguridad" class="course-image">
