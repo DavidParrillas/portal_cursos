@@ -1,5 +1,12 @@
-<?php 
-ob_start(); 
+<?php
+require_once __DIR__ . '/../models/Curso.php';
+require_once __DIR__ . '/../config/database.php';
+
+$pdo = Database::getInstance();
+$cursoModel = new Curso($pdo);
+$ultimosCursos = $cursoModel->obtenerUltimos(3); // Mostramos solo los últimos 6 cursos
+
+ob_start();
 ?>
 
     <!-- Hero Section -->
@@ -57,15 +64,6 @@ ob_start();
                                 >
                             </a>
                             <div class="course-content">
-                                <div class="course-header">
-                                    <?php if (!empty($curso['categoria'])): ?>
-                                        <span class="course-category"><?= htmlspecialchars($curso['categoria']) ?></span>
-                                    <?php endif; ?>
-                                    
-                                    <span class="course-modality <?= strtolower($curso['modalidad']) ?>">
-                                        <?= htmlspecialchars($curso['modalidad']) ?>
-                                    </span>
-                                </div>
                                 
                                 <h3 class="course-title">
                                     <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>">
@@ -112,13 +110,13 @@ ob_start();
                                 <div class="course-footer">
                                     <div class="course-price">
                                         <?php if ($curso['precio'] > 0): ?>
-                                            <span class="price">Q<?= number_format($curso['precio'], 2) ?></span>
+                                            <span class="price">$<?= number_format($curso['precio'], 2) ?></span>
                                         <?php else: ?>
                                             <span class="price free">Gratis</span>
                                         <?php endif; ?>
                                     </div>
                                     
-                                    <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>" class="btn-ver-curso">
+                                    <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>" class="btn btn-primary">
                                         Ver curso
                                     </a>
                                 </div>
@@ -127,15 +125,6 @@ ob_start();
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
-            
-            <?php if (!empty($ultimosCursos)): ?>
-                <div class="ver-todos-cursos">
-                    <a href="/portal_cursos/views/courses/cursos.php" class="btn-ver-todos">
-                        Ver todos los cursos
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-            <?php endif; ?>
         </section>
     </main>
 

@@ -378,17 +378,13 @@ class AdminCursoController {
             // Obtener materiales
             $materiales = $this->cursoModel->obtenerMateriales($idCurso);
 
-            // Obtener categorías
-            $categorias = $this->cursoModel->obtenerCategorias($idCurso);
-
             // Obtener estadísticas
             $estadisticas = $this->cursoModel->obtenerEstadisticas($idCurso);
 
             echo json_encode([
                 'success' => true,
-                'curso' => $curso,
+                'curso' => $curso, // El nombre de la categoría ya debería venir en la consulta de obtenerPorId
                 'materiales' => $materiales,
-                'categorias' => $categorias,
                 'estadisticas' => $estadisticas
             ]);
 

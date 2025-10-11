@@ -20,6 +20,63 @@ class Curso {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function obtenerUltimos($limit = 10) {
+        $sql = "SELECT c.*, u.nombre_completo as instructor, cat.nombre as categoria,
+                       COUNT(i.id_inscripcion) as total_inscritos,
+                       AVG(r.calificacion) as promedio_calificacion,
+                       COUNT(r.id_resena) as total_resenas
+                FROM cursos c
+                JOIN usuarios u ON c.id_instructor = u.id_usuario
+                LEFT JOIN categorias cat ON c.id_categoria = cat.id_categoria
+                LEFT JOIN inscripciones i ON c.id_curso = i.id_curso
+                LEFT JOIN resenas r ON c.id_curso = r.id_curso
+                WHERE c.estado = 'PUBLICADO'
+                GROUP BY c.id_curso
+                ORDER BY c.creado_en DESC
+                LIMIT :limit";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerPorCategoria($idCategoria) {
+        $sql = "SELECT c.*, u.nombre_completo as instructor, cat.nombre as categoria,
+                       COUNT(i.id_inscripcion) as total_inscritos,
+                       AVG(r.calificacion) as promedio_calificacion,
+                       COUNT(r.id_resena) as total_resenas
+                FROM cursos c
+                JOIN usuarios u ON c.id_instructor = u.id_usuario
+                LEFT JOIN categorias cat ON c.id_categoria = cat.id_categoria
+                LEFT JOIN inscripciones i ON c.id_curso = i.id_curso
+                LEFT JOIN resenas r ON c.id_curso = r.id_curso
+                WHERE c.estado = 'PUBLICADO' AND c.id_categoria = :id_categoria
+                GROUP BY c.id_curso
+                ORDER BY c.creado_en DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id_categoria', $idCategoria, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerTodosConDetalles() {
+        $sql = "SELECT c.*, u.nombre_completo as instructor, cat.nombre as categoria,
+                       COUNT(i.id_inscripcion) as total_inscritos,
+                       AVG(r.calificacion) as promedio_calificacion,
+                       COUNT(r.id_resena) as total_resenas
+                FROM cursos c
+                JOIN usuarios u ON c.id_instructor = u.id_usuario
+                LEFT JOIN categorias cat ON c.id_categoria = cat.id_categoria
+                LEFT JOIN inscripciones i ON c.id_curso = i.id_curso
+                LEFT JOIN resenas r ON c.id_curso = r.id_curso
+                WHERE c.estado = 'PUBLICADO'
+                GROUP BY c.id_curso
+                ORDER BY c.creado_en DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Crear un nuevo curso
      * CORREGIDO: Incluye id_categoria directamente en el INSERT
@@ -330,7 +387,6 @@ class Curso {
                 "DELETE FROM resenas WHERE id_curso = :id_curso",
                 "DELETE FROM pagos WHERE id_inscripcion IN (SELECT id_inscripcion FROM inscripciones WHERE id_curso = :id_curso)",
                 "DELETE FROM inscripciones WHERE id_curso = :id_curso",
-                "DELETE FROM cursos_categorias WHERE id_curso = :id_curso",
                 "DELETE FROM cursos WHERE id_curso = :id_curso"
             ];
 

@@ -94,7 +94,7 @@ class CursoController {
 
             $_SESSION['mensaje'] = 'Curso creado exitosamente';
             $_SESSION['mensaje_tipo'] = 'success';
-            header('Location: /portal_cursos/views/courses/cursos.php');
+            header('Location: /portal_cursos/views/instructor/dashboard.php');
             exit;
 
         } catch (Exception $e) {
@@ -244,6 +244,24 @@ class CursoController {
                 }
             }
         }
+    }
+
+    public function listarPorCategoria() {
+        header('Content-Type: application/json');
+        $idCategoria = isset($_GET['id_categoria']) ? (int)$_GET['id_categoria'] : 0;
+
+        try {
+            if ($idCategoria > 0) {
+                $cursos = $this->cursoModel->obtenerPorCategoria($idCategoria);
+            } else {
+                $cursos = $this->cursoModel->obtenerTodosConDetalles();
+            }
+            echo json_encode($cursos);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Error al obtener los cursos: ' . $e->getMessage()]);
+        }
+        exit;
     }
 }
 

@@ -175,7 +175,6 @@ $categorias = $categoriaModel->obtenerTodas();
 
             <footer class="curzilla-form-actions">
                 <button type="button" class="curzilla-btn curzilla-btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
-                <button type="button" class="curzilla-btn curzilla-btn-secondary" name="estado" value="BORRADOR" onclick="guardarComo('BORRADOR')">Guardar como Borrador</button>
                 <button type="submit" class="curzilla-btn curzilla-btn-primary" name="estado" value="PENDIENTE">Enviar para Revisión</button>
             </footer>
             <input type="hidden" name="estado" id="estado-curso" value="PENDIENTE">
