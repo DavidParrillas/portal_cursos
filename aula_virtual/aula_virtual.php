@@ -1,35 +1,138 @@
 <?php
-require_once __DIR__.'/lib/db.php'; require_once __DIR__.'/lib/auth.php';
-$usuarioId = currentUserId(); $cursoId = (int)($_GET['curso_id'] ?? 1); $claseId = (int)($_GET['clase_id'] ?? 0);
-$chk = $db->prepare("SELECT 1 FROM inscripciones WHERE usuario_id=? AND curso_id=?"); $chk->execute([$usuarioId,$cursoId]);
-if (!$chk->fetch()) { http_response_code(403); die('<p>Acceso restringido. Inscríbete en el curso.</p>'); }
-if ($claseId){ $sql = $db->prepare("SELECT c.*, s.curso_id FROM clases c JOIN secciones s ON s.id=c.seccion_id WHERE c.id=?"); $sql->execute([$claseId]); $clase = $sql->fetch(PDO::FETCH_ASSOC); }
-if (empty($clase) || (int)$clase['curso_id'] !== $cursoId){ $first = $db->prepare("SELECT c.id FROM clases c JOIN secciones s ON s.id=c.seccion_id WHERE s.curso_id=? ORDER BY s.orden,c.orden,c.id LIMIT 1"); $first->execute([$cursoId]); $claseId = (int)$first->fetchColumn(); header("Location: /aula_virtual/aula_virtual.php?curso_id=$cursoId&clase_id=$claseId"); exit; }
-$vec = $db->prepare("SELECT c2.id FROM clases c2 JOIN secciones s2 ON s2.id=c2.seccion_id WHERE s2.curso_id=? ORDER BY s2.orden,c2.orden,c2.id"); $vec->execute([$cursoId]); $ids = array_map('intval',$vec->fetchAll(PDO::FETCH_COLUMN)); $pos = array_search((int)$claseId, $ids); $prev = $pos>0 ? $ids[$pos-1] : null; $next = ($pos !== false && $pos < count($ids)-1) ? $ids[$pos+1] : null;
-$prog = $db->prepare("SELECT completada FROM progreso_clase WHERE usuario_id=? AND clase_id=?"); $prog->execute([$usuarioId,$claseId]); $done = (int)($prog->fetchColumn() ?: 0);
-function yt_iframe($url){ if (!preg_match('~(v=|youtu\.be/)([^&?/]+)~',$url,$m)) return ''; $id = htmlspecialchars($m[2]); return "<div class='player'><iframe width='100%' height='420' src='https://www.youtube.com/embed/$id' frameborder='0' allowfullscreen></iframe></div>"; }
-ob_start(); ?>
+/**
+ * Aula Virtual — Vista de materiales del curso
+ * BD usada:
+ *   - inscripciones(id_curso, id_estudiante)
+ *   - cursos(id_curso, titulo, descripcion)
+ *   - materiales(id_material, id_curso, titulo, ruta_archivo)
+ */
+
+require_once __DIR__ . '/../config/config.php';  // trae AULA_BASE y $db (PDO)
+require_once __DIR__ . '/lib/auth.php';          // debe exponer currentUserId()
+
+// ————————————————————————————————————————————————————————————
+// Helpers
+// ————————————————————————————————————————————————————————————
+/** Detecta si un link apunta a YouTube (watch, short, youtu.be, embed) */
+function esVideoYouTube(string $url): bool {
+  $u = strtolower($url);
+  return str_contains($u, 'youtube.com') || str_contains($u, 'youtu.be');
+}
+
+/** Convierte cualquier URL de YouTube a forma embeible: https://www.youtube.com/embed/ID */
+function youtubeEmbedSrc(string $url): ?string {
+  // Soporta: watch?v=ID, youtu.be/ID, /embed/ID, /shorts/ID
+  if (preg_match('~(?:v=|youtu\.be/|embed/|shorts/)([A-Za-z0-9_-]{6,})~', $url, $m)) {
+    $id = $m[1];
+    // Si prefieres privacy-enhanced: youtube-nocookie.com
+    return "https://www.youtube.com/embed/$id";
+  }
+  return null;
+}
+
+// ————————————————————————————————————————————————————————————
+// Entrada
+// ————————————————————————————————————————————————————————————
+$usuarioId = currentUserId();                        // en modo demo podría ser 1
+$cursoId   = (int)($_GET['curso_id'] ?? 0);
+if (!$cursoId) {
+  http_response_code(400);
+  die('<p>ID de curso no válido.</p>');
+}
+
+// ————————————————————————————————————————————————————————————
+// Control de acceso: solo inscritos
+// ————————————————————————————————————————————————————————————
+$st = $db->prepare("SELECT 1 FROM inscripciones WHERE id_curso=? AND id_estudiante=?");
+$st->execute([$cursoId, $usuarioId]);
+if (!$st->fetch()) {
+  http_response_code(403);
+  die('<p>Acceso restringido. Inscríbete en el curso.</p>');
+}
+
+// ————————————————————————————————————————————————————————————
+// Datos del curso
+// ————————————————————————————————————————————————————————————
+$st = $db->prepare("SELECT titulo, descripcion FROM cursos WHERE id_curso=?");
+$st->execute([$cursoId]);
+$curso = $st->fetch(PDO::FETCH_ASSOC);
+if (!$curso) {
+  http_response_code(404);
+  die('<p>Curso no encontrado.</p>');
+}
+
+// ————————————————————————————————————————————————————————————
+// Materiales (lista y material actual)
+// ————————————————————————————————————————————————————————————
+$stm = $db->prepare("SELECT id_material, titulo, ruta_archivo FROM materiales WHERE id_curso=? ORDER BY id_material ASC");
+$stm->execute([$cursoId]);
+$materiales = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+// material actual por parámetro o primero
+$matId  = (int)($_GET['material_id'] ?? ($materiales[0]['id_material'] ?? 0));
+$actual = null;
+foreach ($materiales as $m) {
+  if ((int)$m['id_material'] === $matId) { $actual = $m; break; }
+}
+if (!$actual && !empty($materiales)) $actual = $materiales[0];
+
+// ————————————————————————————————————————————————————————————
+// Render del contenido central (lo inyecta en views/layout.php)
+// ————————————————————————————————————————————————————————————
+ob_start();
+?>
 <article class="article">
-<h2><?= htmlspecialchars($clase['titulo']) ?></h2>
-<p><?= nl2br(htmlspecialchars($clase['descripcion'])) ?></p>
-<?php if (!empty($clase['youtube_url'])): ?><?= yt_iframe($clase['youtube_url']) ?><?php endif; ?>
-<?php if (!empty($clase['archivo_url'])): ?>
-<p><a class="btn" href="<?= htmlspecialchars($clase['archivo_url']) ?>" target="_blank">Descargar material</a></p>
-<object data="<?= htmlspecialchars($clase['archivo_url']) ?>" type="application/pdf" width="100%" height="500"><p>No se puede previsualizar. Descarga el archivo.</p></object>
-<?php endif; ?>
-<div class="nav-actions" style="margin:12px 0;">
-<?php if ($prev): ?><a class="btn" href="/aula_virtual/aula_virtual.php?curso_id=<?= $cursoId ?>&clase_id=<?= $prev ?>">⟵ Anterior</a><?php endif; ?>
-<?php if ($next): ?><a class="btn" href="/aula_virtual/aula_virtual.php?curso_id=<?= $cursoId ?>&clase_id=<?= $next ?>">Siguiente ⟶</a><?php endif; ?>
-</div>
-<label><input type="checkbox" id="chkDone" <?= $done ? 'checked' : '' ?>> Marcar clase como completada</label>
+  <h2><?= htmlspecialchars($curso['titulo']) ?></h2>
+  <?php if (!empty($curso['descripcion'])): ?>
+    <p><?= nl2br(htmlspecialchars($curso['descripcion'])) ?></p>
+  <?php endif; ?>
+
+  <?php if ($actual): ?>
+    <h3><?= htmlspecialchars($actual['titulo']) ?></h3>
+
+    <?php if (esVideoYouTube($actual['ruta_archivo'])):
+          $embed = youtubeEmbedSrc($actual['ruta_archivo']); ?>
+      <?php if ($embed): ?>
+        <div class="player">
+          <iframe
+            width="100%" height="420"
+            src="<?= htmlspecialchars($embed) ?>"
+            frameborder="0"
+            allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      <?php else: ?>
+        <p>El enlace de YouTube no es válido.</p>
+      <?php endif; ?>
+    <?php else: ?>
+      <p><a class="btn" href="<?= htmlspecialchars($actual['ruta_archivo']) ?>" target="_blank">Abrir/Descargar material</a></p>
+      <object data="<?= htmlspecialchars($actual['ruta_archivo']) ?>" type="application/pdf" width="100%" height="500">
+        <p>No se puede previsualizar. Descarga el archivo.</p>
+      </object>
+    <?php endif; ?>
+
+    <div class="nav-actions" style="margin:12px 0;">
+      <?php
+        $keys = array_column($materiales, 'id_material');
+        $pos  = $actual ? array_search($actual['id_material'], $keys) : false;
+        $prev = ($pos !== false && $pos > 0) ? $materiales[$pos - 1]['id_material'] : null;
+        $next = ($pos !== false && $pos < count($materiales) - 1) ? $materiales[$pos + 1]['id_material'] : null;
+      ?>
+      <?php if ($prev): ?>
+        <a class="btn" href="<?= AULA_BASE ?>/aula_virtual/aula_virtual.php?curso_id=<?= $cursoId ?>&material_id=<?= $prev ?>">⟵ Anterior</a>
+      <?php endif; ?>
+      <?php if ($next): ?>
+        <a class="btn" href="<?= AULA_BASE ?>/aula_virtual/aula_virtual.php?curso_id=<?= $cursoId ?>&material_id=<?= $next ?>">Siguiente ⟶</a>
+      <?php endif; ?>
+    </div>
+  <?php else: ?>
+    <p>No hay materiales disponibles para este curso.</p>
+  <?php endif; ?>
 </article>
-<script>
-const chk = document.getElementById('chkDone');
-if (chk) chk.addEventListener('change', async ()=>{
-  await fetch('/aula_virtual/api/marcar_progreso.php', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ clase_id: <?= $claseId ?>, done: chk.checked ? 1 : 0 })
-  });
-});
-</script>
-<?php $content = ob_get_clean(); $pageTitle = 'Aula Virtual'; include __DIR__.'/views/layout.php';
+<?php
+$content   = ob_get_clean();
+$pageTitle = 'Aula Virtual';
+
+// Usa el layout común del módulo
+include __DIR__ . '/views/layout.php';
