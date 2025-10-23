@@ -1,59 +1,47 @@
 <?php
+require_once 'BaseModel.php';
+
 class Resena extends BaseModel {
     protected $id_resena;
     protected $id_curso;
     protected $id_estudiante;
-    protected $calificacion;
+    protected $calificacion; // de 1 a 5 estrellas
     protected $comentario;
     protected $creado_en;
+
     
-    // Getters
-    public function getIdResena() {
-        return $this->id_resena;
+    public function obtenerPorCurso($id_curso) {
+        $query = "SELECT r.*, u.nombre AS estudiante 
+                  FROM resenas r
+                  INNER JOIN usuarios u ON r.id_estudiante = u.id_usuario
+                  WHERE r.id_curso = :id_curso
+                  ORDER BY r.creado_en DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_curso', $id_curso);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     
-    public function getIdCurso() {
-        return $this->id_curso;
+    public function puedeComentar($id_curso, $id_estudiante) {
+        $query = "SELECT COUNT(*) FROM inscripciones 
+                  WHERE id_curso = :id_curso AND id_estudiante = :id_estudiante";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_curso', $id_curso);
+        $stmt->bindParam(':id_estudiante', $id_estudiante);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
     }
+
     
-    public function getIdEstudiante() {
-        return $this->id_estudiante;
-    }
-    
-    public function getCalificacion() {
-        return $this->calificacion;
-    }
-    
-    public function getComentario() {
-        return $this->comentario;
-    }
-    
-    public function getCreadoEn() {
-        return $this->creado_en;
-    }
-    
-    // Setters
-    public function setIdResena($id_resena) {
-        $this->id_resena = $id_resena;
-    }
-    
-    public function setIdCurso($id_curso) {
-        $this->id_curso = $id_curso;
-    }
-    
-    public function setIdEstudiante($id_estudiante) {
-        $this->id_estudiante = $id_estudiante;
-    }
-    
-    public function setCalificacion($calificacion) {
-        $this->calificacion = $calificacion;
-    }
-    
-    public function setComentario($comentario) {
-        $this->comentario = $comentario;
-    }
-    
-    public function setCreadoEn($creado_en) {
-        $this->creado_en = $creado_en;
+    public function crearResena($id_curso, $id_estudiante, $calificacion, $comentario) {
+        $query = "INSERT INTO resenas (id_curso, id_estudiante, calificacion, comentario, creado_en)
+                  VALUES (:id_curso, :id_estudiante, :calificacion, :comentario, NOW())";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_curso', $id_curso);
+        $stmt->bindParam(':id_estudiante', $id_estudiante);
+        $stmt->bindParam(':calificacion', $calificacion);
+        $stmt->bindParam(':comentario', $comentario);
+        return $stmt->execute();
     }
 }
