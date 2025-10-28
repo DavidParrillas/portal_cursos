@@ -263,6 +263,37 @@ class CursoController {
         }
         exit;
     }
+
+
+    public function verDetalle() {
+    $idCurso = isset($_GET['id_curso']) ? intval($_GET['id_curso']) : 0;
+
+    if ($idCurso <= 0) {
+        header('Location: /portal_cursos/index.php');
+        exit;
+    }
+
+    try {
+        $curso = $this->cursoModel->obtenerPorId($idCurso);
+        if (!$curso) {
+            throw new Exception("Curso no encontrado");
+        }
+
+        $materiales = $this->cursoModel->obtenerMateriales($idCurso);
+        $estadisticas = $this->cursoModel->obtenerEstadisticas($idCurso);
+
+        include __DIR__ . '/../views/cursos/detalleCurso.php';
+    } catch (Exception $e) {
+        $_SESSION['mensaje'] = 'Error al cargar el curso: ' . $e->getMessage();
+        $_SESSION['mensaje_tipo'] = 'danger';
+        header('Location: /portal_cursos/index.php');
+        exit;
+    }
+}
+
+
+
+
 }
 
 // Procesar la petición
