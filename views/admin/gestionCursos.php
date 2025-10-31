@@ -14,13 +14,16 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'administrador') 
 // Incluir dependencias
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../models/Curso.php';
+require_once __DIR__ . '/../../models/Categoria.php';
 
 $pdo = Database::getInstance();
 $cursoModel = new Curso($pdo);
+$categoriaModel = new Categoria($pdo);
 
 // Obtener filtros
 $filtroEstado = isset($_GET['estado']) ? $_GET['estado'] : '';
 $filtroBusqueda = isset($_GET['busqueda']) ? $_GET['busqueda'] : '';
+$filtroCategoria = isset($_GET['categoria']) ? $_GET['categoria'] : '';
 
 // Construir filtros
 $filtros = [];
@@ -30,6 +33,13 @@ if (!empty($filtroEstado)) {
 if (!empty($filtroBusqueda)) {
     $filtros['busqueda'] = $filtroBusqueda;
 }
+if (!empty($filtroCategoria)) {
+    $filtros['categoria'] = $filtroCategoria;
+}
+
+// Obtener datos para los filtros
+$categoriasFiltro = $categoriaModel->obtenerTodas();
+$estadosPosibles = ['PENDIENTE', 'PUBLICADO', 'ARCHIVADO', 'BORRADOR'];
 
 // Obtener todos los cursos
 $cursos = $cursoModel->obtenerTodosParaAdmin($filtros);
@@ -53,6 +63,42 @@ ob_start();
     <?php endif; ?>
 
     <section class="ct-container">
+        <!-- Filtros -->
+        <div class="gc-filters">
+            <h3 class="filters-title"><i class="fa-solid fa-filter"></i> Filtros de Búsqueda</h3>
+            <form action="" method="GET" class="form-filters">
+                <div class="filter-group filter-group-search">
+                    <i class="fa-solid fa-search filter-icon"></i>
+                    <input type="text" name="busqueda" placeholder="Buscar por título o instructor..." value="<?= htmlspecialchars($filtroBusqueda) ?>" class="form-control-filter">
+                </div>
+                <div class="filter-group">
+                    <i class="fa-solid fa-toggle-on filter-icon"></i>
+                    <select name="estado" class="form-select-filter">
+                        <option value="">Todos los estados</option>
+                        <?php foreach ($estadosPosibles as $estado): ?>
+                            <option value="<?= $estado ?>" <?= $filtroEstado === $estado ? 'selected' : '' ?>>
+                                <?= ucfirst(strtolower($estado)) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <i class="fa-solid fa-tags filter-icon"></i>
+                    <select name="categoria" class="form-select-filter">
+                        <option value="">Todas las categorías</option>
+                        <?php foreach ($categoriasFiltro as $cat): ?>
+                            <option value="<?= $cat['id_categoria'] ?>" <?= (int)$filtroCategoria === $cat['id_categoria'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($cat['nombre']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Aplicar</button>
+                    <a href="/portal_cursos/views/admin/gestionCursos.php" class="btn btn-secondary"><i class="fa-solid fa-times"></i> Limpiar</a>
+                </div>
+            </form>
+        </div>
         <div class="ct-table-wrapper">
             <?php if (empty($cursos)): ?>
                 <div class="gc-empty-state" style="padding: 40px; text-align: center;">
@@ -106,7 +152,7 @@ ob_start();
                                 </td>
                                 <td>
                                     <?php 
-                                    $categorias = explode(', ', $curso['categorias'] ?? 'Sin categoría');
+                                    $categorias = explode(', ', $curso['categoria'] ?? 'Sin categoría');
                                     foreach ($categorias as $cat): ?>
                                         <span class="ct-badge ct-badge-category"><?= htmlspecialchars($cat) ?></span>
                                     <?php endforeach; ?>

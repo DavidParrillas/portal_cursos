@@ -257,8 +257,9 @@ class Curso {
         }
 
         if (!empty($filtros['busqueda'])) {
-            $sql .= " AND (c.titulo LIKE :busqueda OR u.nombre_completo LIKE :busqueda)";
-            $params[':busqueda'] = '%' . $filtros['busqueda'] . '%';
+            $sql .= " AND (c.titulo LIKE :busqueda_titulo OR u.nombre_completo LIKE :busqueda_instructor)";
+            $params[':busqueda_titulo'] = '%' . $filtros['busqueda'] . '%';
+            $params[':busqueda_instructor'] = '%' . $filtros['busqueda'] . '%';
         }
 
         if (!empty($filtros['categoria'])) {

@@ -154,3 +154,69 @@
 .ct-action-btn.archive:hover { color: #f97316; }
 .ct-action-btn.publish:hover { color: #3b82f6; }
 .ct-action-btn.delete:hover { color: #ef4444; }
+
+/* --- Estilos para los filtros de gestión (NUEVO DISEÑO) --- */
+.gc-filters {
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e5e7eb;
+}
+
+.filters-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.filter-group {
+    position: relative;
+    flex: 1 1 220px; /* Ajuste para mejor distribución */
+}
+
+.filter-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.form-control-filter,
+.form-select-filter {
+    width: 100%;
+    padding: 12px 15px 12px 45px; /* Espacio para el icono */
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9fafb;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control-filter:focus,
+.form-select-filter:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    background-color: #fff;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    margin-left: auto; /* Alinea los botones a la derecha */
+}

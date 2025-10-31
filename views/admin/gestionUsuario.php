@@ -18,8 +18,12 @@ try {
     require_once __DIR__ . '/../../config/database.php';
     $pdo = Database::getInstance();
 
+    // Obtener filtros de la URL
+    $filtroNombre = isset($_GET['nombre']) ? trim($_GET['nombre']) : '';
+    $filtroRol = isset($_GET['rol']) ? trim($_GET['rol']) : '';
+
     // Consulta para obtener usuarios y sus roles
-    $stmt = $pdo->query("
+    $sql = "
         SELECT 
             u.id_usuario, 
             u.nombre_completo, 
@@ -29,8 +33,24 @@ try {
         FROM usuarios u
         JOIN usuarios_roles ur ON u.id_usuario = ur.id_usuario
         JOIN roles r ON ur.id_rol = r.id_rol
-        ORDER BY u.id_usuario ASC
-    ");
+        WHERE 1=1
+    ";
+    $params = [];
+
+    if (!empty($filtroNombre)) {
+        $sql .= " AND (u.nombre_completo LIKE :nombre_completo OR u.correo LIKE :correo_filtro)";
+        $params[':nombre_completo'] = '%' . $filtroNombre . '%';
+        $params[':correo_filtro'] = '%' . $filtroNombre . '%';
+    }
+
+    if (!empty($filtroRol)) {
+        $sql .= " AND r.id_rol = :rol";
+        $params[':rol'] = $filtroRol;
+    }
+
+    $sql .= " ORDER BY u.id_usuario ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $users = $stmt->fetchAll();
 
     // Obtener todos los roles disponibles para el selector
@@ -57,6 +77,33 @@ ob_start();
             <div class="admin-actions" role="toolbar">
                 <button type="button" class="btn btn-primary" onclick="abrirModalUsuario('crear')">Agregar Nuevo Usuario</button>
             </div>
+
+            <!-- Filtros de búsqueda -->
+            <div class="gc-filters">
+                <h3 class="filters-title"><i class="fa-solid fa-filter"></i> Filtros de Búsqueda</h3>
+                <form action="" method="GET" class="form-filters">
+                    <div class="filter-group filter-group-search">
+                        <i class="fa-solid fa-search filter-icon"></i>
+                        <input type="text" name="nombre" placeholder="Buscar por nombre o correo..." value="<?= htmlspecialchars($filtroNombre) ?>" class="form-control-filter">
+                    </div>
+                    <div class="filter-group">
+                        <i class="fa-solid fa-user-tag filter-icon"></i>
+                        <select name="rol" class="form-select-filter">
+                            <option value="">Todos los roles</option>
+                            <?php foreach ($roles as $rol): ?>
+                                <option value="<?= $rol['id_rol'] ?>" <?= (int)$filtroRol === $rol['id_rol'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars(ucfirst($rol['nombre'])) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Aplicar</button>
+                        <a href="/portal_cursos/views/admin/gestionUsuario.php" class="btn btn-secondary"><i class="fa-solid fa-times"></i> Limpiar</a>
+                    </div>
+                </form>
+            </div>
+
             <div class="gc-table-container">
                 <table>
                     <thead>
@@ -71,7 +118,7 @@ ob_start();
                     <tbody>
                         <?php if (empty($users)): ?>
                             <tr>
-                                <td colspan="5" style="text-align: center;">No se encontraron usuarios.</td>
+                                <td colspan="5" style="text-align: center; padding: 20px;">No se encontraron usuarios con los filtros aplicados.</td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($users as $user): ?>
