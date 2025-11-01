@@ -1,13 +1,14 @@
 <?php
-require_once 'models/Resena.php';
+require_once 'C:/xampp/htdocs/portal_cursos/aula_virtual/lib/db.php';
+require_once __DIR__ . '/../models/Resena.php';
 
 class ResenaController {
 
     // Mostrar reseñas de un curso
     public function listarPorCurso($id_curso) {
-        $resenaModel = new Resena();
-        $resenas = $resenaModel->obtenerPorCurso($id_curso);
-        return $resenas;
+        global $db; // conexión PDO
+        $resenaModel = new Resena($db);
+        return $resenaModel->obtenerPorCurso($id_curso);
     }
 
     public function guardarResena() {
@@ -24,16 +25,15 @@ class ResenaController {
             $calificacion = $_POST['calificacion'];
             $comentario = trim($_POST['comentario']);
 
-            $resenaModel = new Resena();
+            global $db;
+            $resenaModel = new Resena($db);
 
-            
             if (!$resenaModel->puedeComentar($id_curso, $id_estudiante)) {
                 $_SESSION['mensaje_error'] = "Solo puedes dejar reseñas en cursos en los que estás inscrito.";
                 header("Location: index.php?controller=Curso&action=detalle&id=$id_curso");
                 exit;
             }
 
-            
             $resultado = $resenaModel->crearResena($id_curso, $id_estudiante, $calificacion, $comentario);
 
             if ($resultado) {

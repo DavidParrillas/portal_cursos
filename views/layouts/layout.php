@@ -1,4 +1,4 @@
-<?php
+ <?php
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 ?>
 
@@ -109,4 +109,4 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
 </body>
-</html>
+</html> 
