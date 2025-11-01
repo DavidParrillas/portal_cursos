@@ -81,7 +81,7 @@ ob_start();
                 }
 
                 cursoCard.innerHTML = `
-                    <a href="/portal_cursos/views/courses/detalle_curso.php?id=${curso.id_curso}" class="course-link">
+                    <a href="/portal_cursos/views/courses/detalleCurso.php?id=${curso.id_curso}" class="course-link">
                         <img 
                             src="${portada}" 
                             alt="${curso.titulo}" 
@@ -91,7 +91,7 @@ ob_start();
                     </a>
                     <div class="course-content">
                         <h3 class="course-title">
-                            <a href="/portal_cursos/views/courses/detalle_curso.php?id=${curso.id_curso}">${curso.titulo}</a>
+                            <a href="/portal_cursos/views/courses/detalleCurso.php?id=${curso.id_curso}">${curso.titulo}</a>
                         </h3>
                         <p class="course-instructor">
                             <i class="fa-solid fa-chalkboard-user"></i>
@@ -110,7 +110,7 @@ ob_start();
                             <div class="course-price">
                                 <span class="price ${precio === 'Gratis' ? 'free' : ''}">${precio}</span>
                             </div>
-                            <a href="/portal_cursos/views/courses/detalle_curso.php?id=${curso.id_curso}" class="btn btn-primary">Ver curso</a>
+                            <a href="/portal_cursos/views/courses/detalleCurso.php?id=${curso.id_curso}" class="btn btn-primary">Ver curso</a>
                         </div>
                     </div>
                 `;

@@ -1,5 +1,4 @@
 <?php
-// Modelo base para herencia de modelos específicos
 class BaseModel {
     protected $pdo;
 
@@ -7,3 +6,4 @@ class BaseModel {
         $this->pdo = $pdo;
     }
 }
+

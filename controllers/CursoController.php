@@ -282,7 +282,7 @@ class CursoController {
         $materiales = $this->cursoModel->obtenerMateriales($idCurso);
         $estadisticas = $this->cursoModel->obtenerEstadisticas($idCurso);
 
-        include __DIR__ . '/../views/cursos/detalleCurso.php';
+        include __DIR__ . '/../views/courses/detalleCurso.php';
     } catch (Exception $e) {
         $_SESSION['mensaje'] = 'Error al cargar el curso: ' . $e->getMessage();
         $_SESSION['mensaje_tipo'] = 'danger';
