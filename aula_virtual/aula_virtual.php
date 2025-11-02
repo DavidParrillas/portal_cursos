@@ -1,7 +1,7 @@
 <?php
 /**
  * Aula Virtual — Vista de materiales del curso
- * Tablas:
+ * BD usada:
  *   - inscripciones(id_curso, id_estudiante)
  *   - cursos(id_curso, titulo, descripcion)
  *   - materiales(id_material, id_curso, titulo, ruta_archivo)
@@ -10,42 +10,65 @@
 require_once __DIR__ . '/../config/config.php';  // trae AULA_BASE y $db (PDO)
 require_once __DIR__ . '/lib/auth.php';          // debe exponer currentUserId()
 
-/** Detecta si un link apunta a YouTube (watch/shorts/youtu.be/embed) */
+// ————————————————————————————————————————————————————————————
+// Helpers
+// ————————————————————————————————————————————————————————————
+/** Detecta si un link apunta a YouTube (watch, short, youtu.be, embed) */
 function esVideoYouTube(string $url): bool {
   $u = strtolower($url);
   return str_contains($u, 'youtube.com') || str_contains($u, 'youtu.be');
 }
 
-/** Convierte cualquier URL de YouTube a https://www.youtube.com/embed/ID */
+/** Convierte cualquier URL de YouTube a forma embeible: https://www.youtube.com/embed/ID */
 function youtubeEmbedSrc(string $url): ?string {
+  // Soporta: watch?v=ID, youtu.be/ID, /embed/ID, /shorts/ID
   if (preg_match('~(?:v=|youtu\.be/|embed/|shorts/)([A-Za-z0-9_-]{6,})~', $url, $m)) {
     $id = $m[1];
-    return "https://www.youtube.com/embed/$id"; // o youtube-nocookie.com
+    // Si prefieres privacy-enhanced: youtube-nocookie.com
+    return "https://www.youtube.com/embed/$id";
   }
   return null;
 }
 
-$usuarioId = currentUserId();                        // en demo podría ser 1
+// ————————————————————————————————————————————————————————————
+// Entrada
+// ————————————————————————————————————————————————————————————
+$usuarioId = currentUserId();                        // en modo demo podría ser 1
 $cursoId   = (int)($_GET['curso_id'] ?? 0);
-if (!$cursoId) { http_response_code(400); die('<p>ID de curso no válido.</p>'); }
+if (!$cursoId) {
+  http_response_code(400);
+  die('<p>ID de curso no válido.</p>');
+}
 
-// Solo inscritos
+// ————————————————————————————————————————————————————————————
+// Control de acceso: solo inscritos
+// ————————————————————————————————————————————————————————————
 $st = $db->prepare("SELECT 1 FROM inscripciones WHERE id_curso=? AND id_estudiante=?");
 $st->execute([$cursoId, $usuarioId]);
-if (!$st->fetch()) { http_response_code(403); die('<p>Acceso restringido. Inscríbete en el curso.</p>'); }
+if (!$st->fetch()) {
+  http_response_code(403);
+  die('<p>Acceso restringido. Inscríbete en el curso.</p>');
+}
 
+// ————————————————————————————————————————————————————————————
 // Datos del curso
+// ————————————————————————————————————————————————————————————
 $st = $db->prepare("SELECT titulo, descripcion FROM cursos WHERE id_curso=?");
 $st->execute([$cursoId]);
 $curso = $st->fetch(PDO::FETCH_ASSOC);
-if (!$curso) { http_response_code(404); die('<p>Curso no encontrado.</p>'); }
+if (!$curso) {
+  http_response_code(404);
+  die('<p>Curso no encontrado.</p>');
+}
 
-// Materiales del curso
+// ————————————————————————————————————————————————————————————
+// Materiales (lista y material actual)
+// ————————————————————————————————————————————————————————————
 $stm = $db->prepare("SELECT id_material, titulo, ruta_archivo FROM materiales WHERE id_curso=? ORDER BY id_material ASC");
 $stm->execute([$cursoId]);
 $materiales = $stm->fetchAll(PDO::FETCH_ASSOC);
 
-// Material actual (por QS o primero)
+// material actual por parámetro o primero
 $matId  = (int)($_GET['material_id'] ?? ($materiales[0]['id_material'] ?? 0));
 $actual = null;
 foreach ($materiales as $m) {
@@ -53,7 +76,9 @@ foreach ($materiales as $m) {
 }
 if (!$actual && !empty($materiales)) $actual = $materiales[0];
 
-// Render contenido central
+// ————————————————————————————————————————————————————————————
+// Render del contenido central (lo inyecta en views/layout.php)
+// ————————————————————————————————————————————————————————————
 ob_start();
 ?>
 <article class="article">
@@ -69,10 +94,13 @@ ob_start();
           $embed = youtubeEmbedSrc($actual['ruta_archivo']); ?>
       <?php if ($embed): ?>
         <div class="player">
-          <iframe width="100%" height="420"
-                  src="<?= htmlspecialchars($embed) ?>"
-                  frameborder="0" allowfullscreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+          <iframe
+            width="100%" height="420"
+            src="<?= htmlspecialchars($embed) ?>"
+            frameborder="0"
+            allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+          </iframe>
         </div>
       <?php else: ?>
         <p>El enlace de YouTube no es válido.</p>
@@ -105,4 +133,6 @@ ob_start();
 <?php
 $content   = ob_get_clean();
 $pageTitle = 'Aula Virtual';
+
+// Usa el layout común del módulo
 include __DIR__ . '/views/layout.php';

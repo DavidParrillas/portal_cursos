@@ -1,9 +1,10 @@
-<?php
-require_once __DIR__ . '/../../config/config.php';
+<?php require_once __DIR__ . '/../../config/config.php';
 
+// El curso viene en la URL
 $cursoId = (int)($_GET['curso_id'] ?? 0);
 $matId   = (int)($_GET['material_id'] ?? 0);
 
+// Lista de materiales del curso
 $stm = $db->prepare("SELECT id_material, titulo FROM materiales WHERE id_curso=? ORDER BY id_material ASC");
 $stm->execute([$cursoId]);
 $items = $stm->fetchAll(PDO::FETCH_ASSOC);
