@@ -1,6 +1,6 @@
 <?php 
 $pageTitle = "Iniciar Sesión - Curzilla";
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 ?>
 
 <main class="main-content">
@@ -72,3 +72,7 @@ include __DIR__ . '/../layouts/layout.php';
         }
     });
 </script>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>

@@ -1,6 +1,6 @@
 <?php 
 $pageTitle = "Pagos - Curzilla";
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 ?>
 
 <header class="hero-section">
@@ -35,3 +35,7 @@ include __DIR__ . '/../layouts/layout.php';
         </section>
     </div>
 </main>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>

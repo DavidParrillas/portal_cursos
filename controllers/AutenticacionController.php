@@ -2,126 +2,126 @@
 
 class AutenticacionController {
     /**
-     * @var PDO The database connection instance.
+     * @var PDO La instancia de conexión a la base de datos.
      */
     private $pdo;
 
     /**
-     * Class constructor.
+     * Constructor de la clase.
      *
-     * @param PDO $pdo A PDO instance for database connection.
+     * @param PDO $pdo Una instancia de PDO para la conexión a la base de datos.
      */
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
     }
 
     public function register() {
-        // Collects form data from POST, with empty default values.
+        // Recoge los datos del formulario desde POST, con valores por defecto vacíos.
         $nombre_completo = $_POST['nombre'] ?? '';
         $correo = $_POST['correo'] ?? '';
         $contrasena = $_POST['contrasena'] ?? '';
         $rol_codigo = 'estudiante'; // Por defecto, todos los registros son de estudiantes.
 
-        // Validates that essential fields are not empty.
+        // Valida que los campos esenciales no estén vacíos.
         if (empty($nombre_completo) || empty($correo) || empty($contrasena)) {
             $this->redirect_with_error('/views/auth/registro.php', 'Todos los campos son obligatorios.');
         }
 
-        // Validates that the email does not exist in any of the user tables.
+        // Valida que el correo no exista en ninguna de las tablas de usuario.
         if ($this->userExists($correo)) {
             $this->redirect_with_error('/views/auth/registro.php', 'El correo electrónico ya está registrado.');
         }
 
-        // Hashes the password for secure storage.
+        // Hashea la contraseña para un almacenamiento seguro.
         $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
         try {
             $this->pdo->beginTransaction();
 
-            // Prepares and executes the insertion query into the 'usuarios' table.
+            // Prepara y ejecuta la consulta de inserción en la tabla 'usuarios'.
             $stmt = $this->pdo->prepare("INSERT INTO usuarios (nombre_completo, correo, contrasena_hash) VALUES (?, ?, ?)");
             $stmt->execute([$nombre_completo, $correo, $contrasena_hash]);
             $id_usuario = $this->pdo->lastInsertId();
 
-            // Gets the ID of the selected role.
+            // Obtiene el ID del rol seleccionado.
             $stmt = $this->pdo->prepare("SELECT id_rol FROM roles WHERE codigo = ?");
             $stmt->execute([$rol_codigo]);
             $id_rol = $stmt->fetchColumn();
 
             if (!$id_rol) {
-                throw new Exception("El rol especificado no es válido.");
+                throw new Exception("El rol especificado no es válido."); // Este mensaje ya está en español.
             }
 
-            // Inserts the relationship into the 'usuarios_roles' table.
+            // Inserta la relación en la tabla 'usuarios_roles'.
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_roles (id_usuario, id_rol) VALUES (?, ?)");
             $stmt->execute([$id_usuario, $id_rol]);
 
             $this->pdo->commit();
 
-            // Redirects to the login page with a success message.
+            // Redirige a la página de login con un mensaje de éxito.
             header('Location: /portal_cursos/views/auth/login.php?status=success');
             exit();
         } catch (Exception $e) {
             $this->pdo->rollBack();
-            // In case of a database error, redirects with an error message.
+            // En caso de un error de base de datos, redirige con un mensaje de error.
             $this->redirect_with_error('/views/auth/registro.php', 'Error al registrar el usuario: ' . $e->getMessage());
         }
     }
 
     /**
-     * Processes the login request.
+     * Procesa la solicitud de inicio de sesión.
      *
-     * Validates credentials, searches for the user in the corresponding tables,
-     * and if correct, sets the session variables.
+     * Valida las credenciales, busca al usuario en las tablas correspondientes,
+     * y si son correctas, establece las variables de sesión.
      */
     public function login() {
-        // Collects form data from POST.
+        // Recoge los datos del formulario desde POST.
         $correo = $_POST['correo'] ?? '';
         $contrasena = $_POST['contrasena'] ?? '';
 
-        // Validates that fields are not empty.
+        // Valida que los campos no estén vacíos.
         if (empty($correo) || empty($contrasena)) {
             $this->redirect_with_error('/views/auth/login.php', 'Correo y contraseña son obligatorios.');
         }
 
-        // Searches for the user by their email address in all role tables.
+        // Busca al usuario por su dirección de correo en todas las tablas de roles.
         $user_data = $this->findUserByEmail($correo);
 
-        // If the user exists and the password is correct.
+        // Si el usuario existe y la contraseña es correcta.
         if ($user_data && password_verify($contrasena, $user_data['contrasena_hash'])) {
-            // ...sets the session variables.
+            // ...establece las variables de sesión.
             $_SESSION['user_id'] = $user_data['id_usuario'];
             $_SESSION['user_nombre'] = $user_data['nombre_completo'];
-            $_SESSION['user_rol'] = $user_data['rol_codigo']; // Assigns the role code
-            // Redirects to the dashboard or main page.
+            $_SESSION['user_rol'] = $user_data['rol_codigo']; // Asigna el código del rol
+            // Redirige al dashboard o a la página principal.
             header('Location: /portal_cursos/public/index.php');
             exit();
         } else {
-            // If credentials are incorrect, redirects with an error.
+            // Si las credenciales son incorrectas, redirige con un error.
             $this->redirect_with_error('/views/auth/login.php', 'Credenciales incorrectas.');
         }
     }
 
     /**
-     * Logs out the user.
+     * Cierra la sesión del usuario.
      *
-     * Destroys the current session and redirects to the home page.
+     * Destruye la sesión actual y redirige a la página de inicio.
      */
     public function logout() {
-        // Deletes all session variables.
+        // Elimina todas las variables de sesión.
         session_unset();
-        // Destroys the session.
+        // Destruye la sesión.
         session_destroy();
-        // Redirects to the main page.
+        // Redirige a la página principal.
         header('Location: /portal_cursos/public/index.php');
         exit();
     }
 
     /**
-     * Checks if a user already exists in the database.
+     * Comprueba si un usuario ya existe en la base de datos.
      *
-     * @param string $correo The email to check.
-     * @return bool True if the user exists, false otherwise.
+     * @param string $correo El correo a verificar.
+     * @return bool True si el usuario existe, false en caso contrario.
      */
     private function userExists($correo) {
         $stmt = $this->pdo->prepare("SELECT id_usuario FROM usuarios WHERE correo = ?");
@@ -130,13 +130,13 @@ class AutenticacionController {
     }
 
     /**
-     * Finds a user by their email address in all role tables.
+     * Busca un usuario por su dirección de correo en todas las tablas de roles.
      *
-     * @param string $correo The user's email to search for.
-     * @return array|null The user's data if found, or null if not.
+     * @param string $correo El correo del usuario a buscar.
+     * @return array|null Los datos del usuario si se encuentra, o null si no.
      */
     private function findUserByEmail($correo) {
-        // Searches for the user in the 'usuarios' table and joins with 'roles' to get the role.
+        // Busca al usuario en la tabla 'usuarios' y une con 'roles' para obtener el rol.
         $stmt = $this->pdo->prepare("\n            SELECT u.*, r.codigo as rol_codigo\n            FROM usuarios u\n            JOIN usuarios_roles ur ON u.id_usuario = ur.id_usuario\n            JOIN roles r ON ur.id_rol = r.id_rol\n            WHERE u.correo = ?\n        ");
         $stmt->execute([$correo]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -145,12 +145,12 @@ class AutenticacionController {
     }
 
     /**
-     * Redirects the user to a specific location with an error message.
+     * Redirige al usuario a una ubicación específica con un mensaje de error.
      *
-     * The error message is stored in the session to be displayed on the destination page.
+     * El mensaje de error se almacena en la sesión para ser mostrado en la página de destino.
      *
-     * @param string $location The path to redirect to (e.g., '/views/auth/login.php').
-     * @param string $message The error message to display.
+     * @param string $location La ruta a la que redirigir (ej. '/views/auth/login.php').
+     * @param string $message El mensaje de error a mostrar.
      */
     private function redirect_with_error($location, $message) {
         $_SESSION['error_message'] = $message;
