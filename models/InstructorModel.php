@@ -4,6 +4,8 @@
  * Extiende de BaseModel para heredar la conexión PDO.
  */
 
+require_once __DIR__ . '/BaseModel.php';
+
 // Ya que BaseModel.php ya tiene una conexión PDO, se heredará desde ese modelo. 
 class Instructor extends BaseModel
 {

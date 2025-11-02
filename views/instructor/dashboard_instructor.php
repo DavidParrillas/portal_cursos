@@ -31,6 +31,25 @@ $estadisticas = $estadisticas ?? [
         </div>
     </div>
 
+    <!-- Agregando panel de estadísticas rápidas -->
+    <div class="stats-panel">
+        <div class="stat-card">
+            <div class="stat-icon purple">📚</div>
+            <div class="stat-label">Total de Cursos</div>
+            <div class="stat-value"><?php echo number_format($estadisticas['total_cursos']); ?></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon blue">👥</div>
+            <div class="stat-label">Total de Estudiantes</div>
+            <div class="stat-value"><?php echo number_format($estadisticas['total_estudiantes']); ?></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green">💰</div>
+            <div class="stat-label">Ingresos Totales</div>
+            <div class="stat-value">$<?php echo number_format($estadisticas['ingresos_totales'], 2); ?></div>
+        </div>
+    </div>
+
     <!-- Botón Enseña Aquí -->
     <div class="teach-button">
         ¡Enseña Aquí!
@@ -40,7 +59,7 @@ $estadisticas = $estadisticas ?? [
     <div class="courses-section">
         <div class="section-header">
             <h2>+Tus cursos</h2>
-            <button class="add-button" onclick="window.location.href='/portal_cursos/views/courses/crearCurso.php'">
+            <button class="add-button" onclick="window.location.href='/portal_cursos/public/instructor_router.php?action=crearCurso'">
                 <span style="font-size: 20px;">+</span> Agregar
             </button>
         </div>
@@ -62,6 +81,15 @@ $estadisticas = $estadisticas ?? [
                             🐍
                         </div>
                         <div class="course-info">
+                            <!-- Agregando badge de estado del curso -->
+                            <?php
+                            $estado = strtolower($curso['estado']);
+                            $estadoClass = 'status-' . str_replace(' ', '-', $estado);
+                            ?>
+                            <span class="course-status-badge <?php echo $estadoClass; ?>">
+                                <?php echo htmlspecialchars($curso['estado']); ?>
+                            </span>
+                            
                             <div class="course-title"><?php echo htmlspecialchars($curso['titulo']); ?></div>
                             <div class="course-instructor"><?php echo htmlspecialchars($curso['nombre_instructor']); ?></div>
                             <div class="course-rating">
@@ -163,7 +191,7 @@ $estadisticas = $estadisticas ?? [
                     <img src="/portal_cursos/public/assets/img/placeholders/PS_Course.jpg" alt="Ilustración de curso Adobe Premiere" width="373px" height="160px">
                 </div>
                 <div class="recommended-info">
-                    <div class="recommended-title">Photoshop Pro</div>
+                    <div class="recommended-title">Photoshop P</div>
                     <div class="course-rating">
                         <span class="stars">★★★★★</span>
                     </div>
