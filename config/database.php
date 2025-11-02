@@ -18,7 +18,7 @@ class Database {
      */
     private function __construct() {
         $host = 'localhost';
-        $db   = 'portal_cursos';
+        $db   = 'grupo03_bdappweb';
         $user = 'root';
         $pass = '';
         $charset = 'utf8mb4';
