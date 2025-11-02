@@ -69,106 +69,18 @@ if ($sessionUserId && $sessionUserRol === 'estudiante') {
     $stmt->execute([$idCurso, $sessionUserId]);
     $estaInscrito = (bool) $stmt->fetchColumn();
 }
+
+$pageTitle = htmlspecialchars($curso['titulo']) . " - Detalle del Curso";
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($curso['titulo']) ?> - Detalle del Curso</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        /* ===========================
-           Estilos exclusivos de detalleCurso.php
-           =========================== */
-        body {
-            background: #e8f0ff !important;
-            font-family: "Poppins", sans-serif !important;
-        }
-
-        .container {
-            max-width: 1100px !important;
-            margin: 30px auto !important;
-            background: #f9fbff !important;
-            border-radius: 12px !important;
-            padding: 25px !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-        }
-
-        .card {
-            border-radius: 12px !important;
-            overflow: hidden;
-        }
-
-        .card-body h3 {
-            color: #1e293b;
-            font-weight: 600;
-        }
-
-        .card-body p, label, small {
-            color: #334155;
-        }
-
-        .btn-primary {
-            background-color: #4f46e5 !important;
-            border: none !important;
-        }
-
-        .btn-primary:hover {
-            background-color: #4338ca !important;
-        }
-
-        .btn-success {
-            background-color: #16a34a !important;
-            border: none !important;
-        }
-
-        .btn-warning {
-            background-color: #f59e0b !important;
-            border: none !important;
-        }
-
-        .btn-dark {
-            background-color: #1e293b !important;
-            border: none !important;
-        }
-
-        .resena {
-            background-color: #f1f5f9 !important;
-            border-left: 5px solid #6366f1 !important;
-            padding: 15px !important;
-            border-radius: 8px !important;
-            margin-bottom: 10px !important;
-        }
-
-        textarea.form-control, input[type="radio"] {
-            accent-color: #4f46e5 !important;
-        }
-
-        .card-material {
-            background-color: #f8fafc !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 10px !important;
-            padding: 15px !important;
-            margin-bottom: 15px !important;
-        }
-
-        iframe, embed {
-            border-radius: 8px !important;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container mt-4">
-    <div class="card shadow">
+<div class="course-detail-container">
+    <div class="course-detail-card">
         <div class="row g-0">
             <div class="col-md-4">
                 <img src="<?= htmlspecialchars($curso['portada'] ?? '/portal_cursos/public/assets/img/placeholders/course-default.png') ?>" class="img-fluid rounded-start" alt="Portada del curso">
             </div>
             <div class="col-md-8">
-                <div class="card-body">
+                <div class="course-detail-body">
                     <h3><?= htmlspecialchars($curso['titulo']) ?></h3>
                     <p class="text-muted mb-1">Instructor: <?= htmlspecialchars($curso['id_instructor']) ?></p>
                     <p class="text-muted mb-1">Categoría: <?= htmlspecialchars($curso['id_categoria'] ?? '') ?></p>
@@ -283,8 +195,7 @@ if ($sessionUserId && $sessionUserRol === 'estudiante') {
     <?php endif; ?>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
+<?php
+$content = ob_get_clean();
+require_once __DIR__ . '/../layouts/layout.php';
+?>
