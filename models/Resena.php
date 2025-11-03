@@ -27,8 +27,8 @@ class Resena extends BaseModel {
 
     // Validar si puede comentar
     public function puedeComentar($id_curso, $id_estudiante) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM inscripciones WHERE id_curso = :id_curso AND id_estudiante = :id_estudiante");
-        $stmt->execute(['id_curso' => $id_curso, 'id_estudiante' => $id_estudiante]);
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM inscripciones WHERE id_curso = :id_curso AND id_usuario = :id_usuario");
+        $stmt->execute(['id_curso' => $id_curso, 'id_usuario' => $id_estudiante]);
         return $stmt->fetchColumn() > 0;
     }
 }

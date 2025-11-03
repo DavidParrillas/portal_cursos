@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/BaseModel.php';
+
 class Inscripcion extends BaseModel {
     protected $id_inscripcion;
     protected $id_curso;
@@ -37,5 +39,12 @@ class Inscripcion extends BaseModel {
     
     public function setFechaInscrito($fecha_inscrito) {
         $this->fecha_inscrito = $fecha_inscrito;
+    }
+
+    public function yaInscrito($idCurso, $idUsuario) {
+        $sql = "SELECT COUNT(*) FROM inscripciones WHERE id_curso = :id_curso AND id_usuario = :id_usuario";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id_curso' => $idCurso, ':id_usuario' => $idUsuario]);
+        return $stmt->fetchColumn() > 0;
     }
 }

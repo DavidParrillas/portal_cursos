@@ -164,7 +164,7 @@ ob_start();
         <?php if ($sessionUserId && $sessionUserRol === 'estudiante'): ?>
         <div class="resena-form">
             <h5>Deja tu reseña</h5>
-            <form action="/portal_cursos/controllers/ResenaController.php?action=guardarResena" method="POST">
+            <form id="form-resena" action="/portal_cursos/controllers/ResenaController.php?action=guardarResena" method="POST">
                 <input type="hidden" name="id_curso" value="<?= (int)$curso['id_curso'] ?>">
                 <input type="hidden" name="id_estudiante" value="<?= (int)$sessionUserId ?>">
                 <div class="mb-3">
@@ -201,9 +201,11 @@ ob_start();
                         <?php elseif ((int)$curso['cupos'] <= 0): ?>
                             <button class="btn btn-secondary" disabled>Sin cupos disponibles</button>
                         <?php else: ?>
-                            <form action="/portal_cursos/controllers/InscripcionController.php" method="POST" class="d-inline">
+                            <form action="/portal_cursos/public/paypal_init.php" method="POST" class="d-inline">
                                 <input type="hidden" name="id_curso" value="<?= (int)$curso['id_curso'] ?>">
-                                <button type="submit" class="btn btn-primary">Inscribirse ahora</button>
+                                <input type="hidden" name="precio_curso" value="<?= htmlspecialchars($curso['precio']) ?>">
+                                <input type="hidden" name="titulo_curso" value="<?= htmlspecialchars($curso['titulo']) ?>">
+                                <button type="submit" class="btn btn-primary">Pagar con PayPal</button>
                             </form>
                         <?php endif; ?>
                     <?php elseif ($sessionUserRol === 'instructor'): ?>
@@ -216,6 +218,28 @@ ob_start();
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const formResena = document.getElementById('form-resena');
+    if (formResena) {
+        formResena.addEventListener('submit', function(event) {
+            event.preventDefault(); // Detener el envío del formulario
+
+            alertify.confirm(
+                'Confirmar Envío', 
+                '¿Estás seguro de que quieres enviar tu reseña?', 
+                function() { 
+                    formResena.submit(); // Si el usuario confirma, se envía el formulario
+                }, 
+                function() { 
+                    alertify.error('Envío cancelado'); // Si el usuario cancela
+                }
+            ).set('labels', {ok:'Enviar', cancel:'Cancelar'});
+        });
+    }
+});
+</script>
 
 <?php
 $content = ob_get_clean();

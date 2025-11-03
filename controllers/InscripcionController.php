@@ -11,11 +11,12 @@ class InstructorController {
     }
 
     private function verificarInstructor() {
-        // En versiones anteriores esta función restringía la inscripción solo a instructores.
-        // Se modifica para permitir que cualquier usuario (o rol) pueda acceder a las
-        // acciones de inscripción. La función se mantiene para compatibilidad si en
-        // el futuro se desea añadir validaciones adicionales.
-        return true;
+        $rol = $_SESSION['user_rol'] ?? '';
+        if (!in_array($rol, ['docente', 'instructor'], true)) {
+            http_response_code(403);
+            echo 'No tienes permisos para esta acción';
+            exit;
+        }
     }
 
     public function index() {
