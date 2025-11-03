@@ -1,0 +1,236 @@
+/* Estilos para la página de detalle de curso */
+:root {
+    --primary-color: #6366F1;
+    --hover-color: #4F46E5;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-900: #111827;
+}
+
+.curso-detalle {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 992px) {
+    .curso-detalle {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+.curso-main-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+}
+
+.curso-sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.curso-header {
+    margin-bottom: 2rem;
+}
+
+.curso-titulo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--gray-900);
+    margin-bottom: 1rem;
+}
+
+.curso-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    color: var(--gray-600);
+    margin-bottom: 1.5rem;
+}
+
+.curso-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.curso-sidebar-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.curso-imagen {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.curso-sidebar-body {
+    padding: 1.5rem;
+}
+
+.curso-precio {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.curso-acciones .btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.curso-descripcion {
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Sección de materiales */
+.materiales-section {
+    margin-bottom: 2rem;
+}
+
+.materiales-titulo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--gray-900);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 0.5rem;
+}
+
+.materiales-lista {
+    display: grid;
+    gap: 1rem;
+}
+
+.material-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--gray-200);
+}
+
+.material-item:hover {
+    background: var(--gray-100);
+    transform: translateY(-2px);
+}
+
+.material-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-right: 1rem;
+}
+
+.material-info {
+    flex: 1;
+}
+
+.material-titulo {
+    font-weight: 500;
+    color: var(--gray-900);
+    margin-bottom: 0.25rem;
+}
+
+.material-meta {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+/* Sección de reseñas */
+.resenas-section {
+    margin-bottom: 2rem;
+}
+
+.resenas-titulo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--gray-900);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 0.5rem;
+}
+
+.resenas-lista {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.resena-item {
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: 1.5rem;
+}
+
+.resena-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.resena-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.resena-autor {
+    font-weight: bold;
+    color: var(--gray-900);
+}
+
+.resena-fecha {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+.resena-calificacion {
+    color: #fbbf24;
+    margin-bottom: 0.5rem;
+}
+
+.resena-contenido {
+    color: var(--gray-700);
+    line-height: 1.6;
+}
+
+/* Formulario de reseña */
+.resena-form {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .curso-meta {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .curso-titulo {
+        font-size: 2rem;
+    }
+
+    .curso-precio {
+        font-size: 1.75rem;
+    }
+}

@@ -54,7 +54,7 @@ ob_start();
             <?php else: ?>
                 <?php foreach ($ultimosCursos as $curso): ?>
                     <article class="course-card">
-                        <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>" class="course-link">
+                        <a href="/portal_cursos/views/courses/detalleCurso.php?id=<?= $curso['id_curso'] ?>" class="course-link">
                             <img 
                                 src="<?= !empty($curso['portada']) ? htmlspecialchars($curso['portada']) : '/portal_cursos/public/assets/img/placeholders/course-default.png' ?>" 
                                 alt="<?= htmlspecialchars($curso['titulo']) ?>" 
@@ -65,7 +65,7 @@ ob_start();
                         <div class="course-content">
                             
                             <h3 class="course-title">
-                                <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>">
+                                    <a href="/portal_cursos/views/courses/detalleCurso.php?id=<?= $curso['id_curso'] ?>">
                                     <?= htmlspecialchars($curso['titulo']) ?>
                                 </a>
                             </h3>
@@ -115,7 +115,7 @@ ob_start();
                                     <?php endif; ?>
                                 </div>
                                 
-                                <a href="/portal_cursos/views/courses/detalle_curso.php?id=<?= $curso['id_curso'] ?>" class="btn btn-primary">
+                                <a href="/portal_cursos/views/courses/detalleCurso.php?id=<?= $curso['id_curso'] ?>" class="btn btn-primary">
                                     Ver curso
                                 </a>
                             </div>

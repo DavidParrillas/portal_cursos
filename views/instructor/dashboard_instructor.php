@@ -3,8 +3,7 @@
  * Vista del Dashboard del Instructor
  * Muestra los cursos del instructor y estadísticas
  */
-
-include __DIR__ . '/../layouts/layout.php';
+ob_start();
 
 $cursos = $cursos ?? [];
 $estadisticas = $estadisticas ?? [
@@ -226,3 +225,7 @@ $estadisticas = $estadisticas ?? [
         }
     }
 </script>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/layout.php';
+?>

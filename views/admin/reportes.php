@@ -12,7 +12,8 @@ if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'administrador') 
     exit;
 }
 
-include __DIR__ . '/../layouts/layout.php';
+// Iniciar el buffer de salida
+ob_start();
 ?>
 
 <link rel="stylesheet" href="/portal_cursos/public/assets/css/reportes.css?v=<?php echo time(); ?>">
@@ -153,3 +154,11 @@ include __DIR__ . '/../layouts/layout.php';
 </main>
 
 <script src="/portal_cursos/public/assets/js/reportes.js?v=<?php echo time(); ?>"></script>
+
+<?php
+// Capturar el contenido del buffer y limpiarlo
+$content = ob_get_clean();
+
+// Incluir el layout
+include __DIR__ . '/../layouts/layout.php';
+?>

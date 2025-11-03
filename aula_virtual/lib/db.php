@@ -1,7 +1,7 @@
 <?php
 // Credenciales por defecto de XAMPP
 $DB_HOST = getenv('DB_HOST') ?: '127.0.0.1'; // o 'localhost'
-$DB_NAME = getenv('DB_NAME') ?: 'bd_appweb';
+$DB_NAME = getenv('DB_NAME') ?: 'portal_cursos';
 $DB_USER = getenv('DB_USER') ?: 'root';
 $DB_PASS = getenv('DB_PASS') ?: '';
 
