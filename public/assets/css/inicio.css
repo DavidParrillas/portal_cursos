@@ -1,0 +1,409 @@
+/* Hero Section */
+.hero {
+    background: linear-gradient(180deg, #a996ff 0%, #e2d9ff 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+    color: #222;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1100px;
+    width: 100%;
+}
+
+.hero-text h1 {
+    font-size: 2.2rem;
+    color: #2d1e75;
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 1rem 0;
+}
+
+.hero-image img {
+    width: 350px;
+}
+
+/* General sections 
+.section-header h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #1a1a1a;
+    background: #fff;
+    border: 3px solid #32a3ff;
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    margin: 2rem auto;
+}*/
+/* ===================== HEADER ANIMADO ===================== */
+.section-header {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #d2f4ff 0%, #e8faff 100%);
+  border-radius: 18px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 1100px;
+  animation: fadeInHeader 1.2s ease-in-out forwards;
+}
+
+.section-header .header-inner {
+  position: relative;
+  z-index: 2;
+  animation: slideUpHeader 1s ease-in-out forwards;
+}
+
+.section-header h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1a0943;
+  margin-bottom: 0.5rem;
+}
+
+.section-header h2 span {
+  color: #5b38f0;
+  text-shadow: 1px 1px 3px rgba(91, 56, 240, 0.25);
+}
+
+.section-header p {
+  color: #444;
+  font-size: 1.05rem;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-top: 0.4rem;
+}
+
+/* Efecto de brillo en diagonal */
+.section-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: skewX(-25deg);
+  animation: sweepLight 4s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ===================== ANIMACIONES ===================== */
+@keyframes fadeInHeader {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpHeader {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes sweepLight {
+  0% {
+    left: -60%;
+  }
+  100% {
+    left: 120%;
+  }
+}
+
+/* Courses */
+.courses-section {
+  padding: 2.5rem 3rem;
+  background: #f9f9f9;
+}
+
+.courses-section h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.8rem;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  width: 280px;
+  margin: auto;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+.course-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+
+.course-content {
+  padding: 1rem 1.2rem 1.3rem;
+  text-align: center;
+}
+.course-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d1e75;
+  margin-bottom: 0.6rem;
+}
+
+.course-teacher {
+  color: #333;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.course-teacher i {
+  margin-right: 6px;
+  color: #2d1e75;
+}
+
+.course-info {
+  font-size: 0.85rem;
+  color: #444;
+  margin-bottom: 0.8rem;
+}
+
+.course-info i {
+  color: #2d1e75;
+  margin-right: 4px;
+}
+
+.course-rating {
+  margin-bottom: 0.3rem;
+}
+
+.course-rating i {
+  color: #f7c41f; /* estrella dorada */
+  margin-right: 4px;
+}
+.course-price {
+  font-weight: 700;
+  color: #2d1e75;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+}
+.section-header h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 3rem 0 1rem;
+}
+.courses-section.recomendados {
+  background-color: #fefefe;
+}
+/* Botón principal */
+.btn-primary {
+    background: #2d1e75;
+    color: #fff;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #4529a1;
+}
+/* ==== BOTÓN "VER CURSO" ==== */
+.btn-vercurso {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background-color: #2d1e75;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.6rem 0;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btn-vercurso:hover {
+  background-color: #3a29a3;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+/* ===== ESTADO DEL CURSO ===== */
+.course-status {
+  font-weight: 600;
+  text-align: center;
+  margin: 0.5rem 0 0.8rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  color: white;
+  width: 100%;
+}
+
+/* Colores según estado */
+.course-status.green {
+  background-color: #1eb71e; /* activo */
+}
+
+.course-status.blue {
+  background-color: #007bff; /* próximo */
+}
+
+.course-status.gray {
+  background-color: #6c757d; /* finalizado */
+}
+/* ===================== BARRA DE PROGRESO ===================== */
+.progress-container {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 12px;
+  width: 100%;
+  margin-bottom: 0.8rem;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #2d1e75, #5a4af4);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: right;
+  padding-right: 6px;
+  line-height: 12px;
+  transition: width 0.5s ease;
+  border-radius: 10px;
+}
+/* ===================== ENCABEZADO DE CURSOS ===================== */
+/* ===================== ENCABEZADO DE CURSOS ===================== */
+.courses-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem; /* 🔹 mayor espacio entre header y tarjetas */
+  flex-wrap: wrap; /* 🔹 para adaptarse en pantallas pequeñas */
+}
+
+.courses-header h3 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #2d1e75;
+  margin: 0; /* 🔹 elimina margen por defecto */
+}
+
+/* Caja del buscador */
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 0.4rem; /* 🔹 leve ajuste vertical */
+}
+/* ===================== EFECTO DE FILTRADO ===================== */
+.course-card {
+  transition: all 0.25s ease-in-out;
+  opacity: 1;
+}
+
+.course-card[style*="display: none"] {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+
+.search-input:focus {
+  border-color: #2d1e75;
+  box-shadow: 0 0 8px rgba(45, 30, 117, 0.2);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .courses-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+/* ===================== EFECTO DE FILTRADO ===================== */
+.course-card {
+  transition: all 0.25s ease-in-out;
+  opacity: 1;
+}
+
+.course-card[style*="display: none"] {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+/* ===================== BUSCADOR CON ICONO ===================== */
+.search-container {
+  position: relative;
+  display: inline-block;
+}
+
+.search-container input {
+  padding: 10px 40px 10px 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 280px;
+  transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: #3a6ff7;
+  box-shadow: 0 0 5px rgba(58, 111, 247, 0.3);
+}
+
+
+
+/* Ocultar el ícono cuando el input está enfocado o tiene texto */
+.search-container input:focus + .search-icon,
+.search-container input:not(:placeholder-shown) + .search-icon {
+  opacity: 0;
+}
+

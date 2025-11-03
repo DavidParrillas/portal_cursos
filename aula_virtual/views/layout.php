@@ -8,3 +8,4 @@
 <nav class="topnav"><a href="/">Inicio</a><a href="/cursos.php">Cursos</a></nav></header>
 <div class="container"><aside class="sidebar"><?php include __DIR__.'/../partials/sidebar_curso.php'; ?></aside>
 <main class="content"><?php echo $content ?? ''; ?></main></div></body></html>
+<link rel="stylesheet" href="/assets/css/inicio.css">
