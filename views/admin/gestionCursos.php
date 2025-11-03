@@ -165,7 +165,7 @@ ob_start();
                                 </td>
                                 <td>
                                     <div class="ct-actions">
-                                        <a href="detalleCurso.php?id=<?= $curso['id_curso'] ?>" class="ct-action-btn" title="Ver detalles">
+                                        <a href="/portal_cursos/views/courses/detalleCurso.php?id=<?= $curso['id_curso'] ?>" class="ct-action-btn" title="Ver detalles">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
 

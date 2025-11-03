@@ -326,6 +326,48 @@ class Curso {
     }
 
     /**
+     * Verificar si existe un slug usado por otro curso distinto al actual
+     */
+    public function existeSlugExcepto($slug, $idCurso) {
+        $sql = "SELECT COUNT(*) FROM cursos WHERE slug = :slug AND id_curso != :id_curso";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':slug' => $slug, ':id_curso' => $idCurso]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    /**
+     * Actualizar los datos de un curso
+     */
+    public function actualizar($idCurso, $datos) {
+        $sql = "UPDATE cursos SET
+                    titulo = :titulo,
+                    slug = :slug,
+                    descripcion = :descripcion,
+                    duracion = :duracion,
+                    modalidad = :modalidad,
+                    precio = :precio,
+                    fecha_inicio = :fecha_inicio,
+                    cupos = :cupos,
+                    id_categoria = :id_categoria,
+                    actualizado_en = CURRENT_TIMESTAMP
+                WHERE id_curso = :id_curso";
+
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':titulo' => $datos['titulo'],
+            ':slug' => $datos['slug'],
+            ':descripcion' => $datos['descripcion'],
+            ':duracion' => $datos['duracion'],
+            ':modalidad' => $datos['modalidad'],
+            ':precio' => $datos['precio'],
+            ':fecha_inicio' => $datos['fecha_inicio'],
+            ':cupos' => $datos['cupos'],
+            ':id_categoria' => $datos['id_categoria'],
+            ':id_curso' => $idCurso
+        ]);
+    }
+
+    /**
      * Obtener estadísticas de un instructor
      */
     public function obtenerEstadisticasInstructor($idInstructor) {

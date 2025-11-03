@@ -137,7 +137,7 @@ class AutenticacionController {
      */
     private function findUserByEmail($correo) {
         // Busca al usuario en la tabla 'usuarios' y une con 'roles' para obtener el rol.
-        $stmt = $this->pdo->prepare("\n            SELECT u.*, r.codigo as rol_codigo\n            FROM usuarios u\n            JOIN usuarios_roles ur ON u.id_usuario = ur.id_usuario\n            JOIN roles r ON ur.id_rol = r.id_rol\n            WHERE u.correo = ?\n        ");
+        $stmt = $this->pdo->prepare("\n            SELECT u.*, r.codigo as rol_codigo\n            FROM usuarios u\n            JOIN usuarios_roles ur ON u.id_usuario = ur.id_usuario\n            JOIN roles r ON ur.id_rol = r.id_rol\n            WHERE u.correo = ?\n            ORDER BY r.id_rol DESC\n            LIMIT 1\n        ");
         $stmt->execute([$correo]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

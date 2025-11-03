@@ -294,6 +294,140 @@ class CursoController {
 
 
 
+    public function actualizar() {
+        // Verificar método y permisos
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /portal_cursos/index.php');
+            exit;
+        }
+
+        if (!isset($_SESSION['user_rol']) || $_SESSION['user_rol'] !== 'instructor') {
+            $_SESSION['mensaje'] = 'No tienes permisos para editar cursos';
+            $_SESSION['mensaje_tipo'] = 'danger';
+            header('Location: /portal_cursos/index.php');
+            exit;
+        }
+
+        $idCurso = isset($_POST['id_curso']) ? intval($_POST['id_curso']) : 0;
+        if ($idCurso <= 0) {
+            $_SESSION['mensaje'] = 'ID de curso inválido';
+            $_SESSION['mensaje_tipo'] = 'danger';
+            header('Location: /portal_cursos/public/instructor_router.php?action=dashboard');
+            exit;
+        }
+
+        try {
+            $this->pdo->beginTransaction();
+
+            // Asegurar que el instructor es dueño del curso
+            if (!$this->cursoModel->esInstructorDelCurso($idCurso, $_SESSION['user_id'])) {
+                throw new Exception('No eres el propietario de este curso');
+            }
+
+            // Validaciones básicas (no requerimos portada obligatoria en edición)
+            $errores = [];
+            if (empty($_POST['titulo'])) $errores[] = 'El título es obligatorio';
+            if (empty($_POST['descripcion'])) $errores[] = 'La descripción es obligatoria';
+            if (empty($_POST['modalidad'])) $errores[] = 'La modalidad es obligatoria';
+            if (!isset($_POST['precio']) || $_POST['precio'] < 0) $errores[] = 'El precio debe ser mayor o igual a 0';
+            if (!isset($_POST['cupos']) || $_POST['cupos'] < 0) $errores[] = 'Los cupos deben ser mayor o igual a 0';
+            if (empty($_POST['categorias']) || !is_array($_POST['categorias'])) $errores[] = 'Debes seleccionar al menos una categoría';
+
+            if (!empty($errores)) {
+                throw new Exception(implode('<br>', $errores));
+            }
+
+            // Construir slug: si el título cambió, generar y asegurarse que no lo use otro curso
+            $cursoActual = $this->cursoModel->obtenerPorId($idCurso);
+            $tituloNuevo = trim($_POST['titulo']);
+            $slug = $cursoActual['slug'];
+            if ($tituloNuevo !== $cursoActual['titulo']) {
+                $baseSlug = strtolower(trim($tituloNuevo));
+                $baseSlug = preg_replace('/[^a-z0-9-]/', '-', $baseSlug);
+                $baseSlug = preg_replace('/-+/', '-', $baseSlug);
+                $baseSlug = trim($baseSlug, '-');
+
+                $slugCandidate = $baseSlug;
+                $contador = 1;
+                while ($this->cursoModel->existeSlugExcepto($slugCandidate, $idCurso)) {
+                    $slugCandidate = $baseSlug . '-' . $contador;
+                    $contador++;
+                }
+                $slug = $slugCandidate;
+            }
+
+            // Construir duración
+            $partes = [];
+            if (!empty($_POST['secciones']) && $_POST['secciones'] > 0) $partes[] = $_POST['secciones'] . ' sección' . ($_POST['secciones'] > 1 ? 'es' : '');
+            if (!empty($_POST['clases']) && $_POST['clases'] > 0) $partes[] = $_POST['clases'] . ' clase' . ($_POST['clases'] > 1 ? 's' : '');
+            if (!empty($_POST['horas']) && $_POST['horas'] > 0) $partes[] = $_POST['horas'] . ' hora' . ($_POST['horas'] > 1 ? 's' : '');
+            $duracion = !empty($partes) ? implode(', ', $partes) : null;
+
+            $idCategoria = !empty($_POST['categorias']) ? intval($_POST['categorias'][0]) : null;
+
+            $datosCurso = [
+                'titulo' => $tituloNuevo,
+                'slug' => $slug,
+                'descripcion' => trim($_POST['descripcion']),
+                'duracion' => $duracion,
+                'modalidad' => $_POST['modalidad'],
+                'precio' => floatval($_POST['precio']),
+                'fecha_inicio' => !empty($_POST['fecha_inicio']) ? $_POST['fecha_inicio'] : null,
+                'cupos' => intval($_POST['cupos']),
+                'id_categoria' => $idCategoria
+            ];
+
+            // Actualizar curso
+            $this->cursoModel->actualizar($idCurso, $datosCurso);
+
+            // Subir nueva portada si la hay
+            if (isset($_FILES['portada']) && $_FILES['portada']['error'] === UPLOAD_ERR_OK) {
+                $rutaPortada = $this->subirImagen($_FILES['portada'], $idCurso);
+                $this->cursoModel->actualizarPortada($idCurso, $rutaPortada);
+            }
+
+            // Eliminar materiales solicitados
+            if (!empty($_POST['materiales_eliminar'])) {
+                foreach ($_POST['materiales_eliminar'] as $idMaterial) {
+                    $this->materialModel->eliminar(intval($idMaterial));
+                }
+            }
+
+            // Subir nuevos archivos de apoyo
+            if (isset($_FILES['archivos']) && !empty($_FILES['archivos']['name'][0])) {
+                $this->subirArchivos($_FILES['archivos'], $idCurso);
+            }
+
+            // Guardar videos nuevos (si vienen en POST)
+            if (!empty($_POST['videos'])) {
+                foreach ($_POST['videos'] as $video) {
+                    if (!empty($video['titulo']) && !empty($video['url'])) {
+                        $this->materialModel->crearVideo([
+                            'id_curso' => $idCurso,
+                            'id_usuario' => $_SESSION['user_id'],
+                            'titulo' => trim($video['titulo']),
+                            'ruta_archivo' => trim($video['url'])
+                        ]);
+                    }
+                }
+            }
+
+            $this->pdo->commit();
+
+            $_SESSION['mensaje'] = 'Curso actualizado correctamente';
+            $_SESSION['mensaje_tipo'] = 'success';
+            header('Location: /portal_cursos/public/instructor_router.php?action=dashboard');
+            exit;
+
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            $_SESSION['mensaje'] = 'Error al actualizar el curso: ' . $e->getMessage();
+            $_SESSION['mensaje_tipo'] = 'danger';
+            header('Location: /portal_cursos/public/instructor_router.php?action=dashboard');
+            exit;
+        }
+    }
+
 }
 
 // Procesar la petición

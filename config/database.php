@@ -1,54 +1,36 @@
 <?php
 /**
- * Clase Database
- * Gestiona la conexión a la BD usando el patrón Singleton para asegurar una única instancia.
+ * Database singleton wrapper.
+ * Proporciona Database::getInstance() y también expone $pdo para compatibilidad.
  */
+
 class Database {
-    /**
-     * @var self|null Instancia única de la clase (Singleton).
-     */
+    /** @var PDO|null */
     private static $instance = null;
-    /**
-     * @var PDO Objeto de conexión a la base de datos.
-     */
-    private $pdo;
 
-    /**
-     * Constructor privado para prevenir la instanciación directa y establecer la conexión.
-     */
-    private function __construct() {
-        $host = 'localhost';
-        $db   = 'portal_cursos';
-        $user = 'root';
-        $pass = '';
-        $charset = 'utf8mb4';
-
-        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-        $options = [
-            // Lanza excepciones en caso de errores.
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            // Obtener resultados como array asociativo.
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            // Desactiva emulación de sentencias preparadas para mayor seguridad.
-            PDO::ATTR_EMULATE_PREPARES   => false,
-        ];
-
-        try {
-            $this->pdo = new PDO($dsn, $user, $pass, $options);
-        } catch (PDOException $e) {
-            // En producción, registrar el error en lugar de mostrarlo.
-            die("Error de conexión a la base de datos: " . $e->getMessage());
-        }
-    }
-
-    /**
-     * Obtiene la instancia de la conexión a la base de datos.
-     * @return PDO El objeto PDO para interactuar con la BD.
-     */
     public static function getInstance() {
         if (self::$instance === null) {
-            self::$instance = new self();
+            try {
+                $dsn = 'mysql:host=localhost;dbname=portal_cursos;charset=utf8mb4';
+                $options = [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false
+                ];
+                self::$instance = new PDO($dsn, 'root', '', $options);
+            } catch (PDOException $e) {
+                error_log("ERROR CONEXIÓN BD: " . $e->getMessage());
+                throw $e;
+            }
         }
-        return self::$instance->pdo;
+        return self::$instance;
     }
 }
+
+// Compatibilidad: crear $pdo para código que espere esa variable
+try {
+    $pdo = Database::getInstance();
+} catch (Exception $e) {
+    die("Error de conexión a la base de datos");
+}
+?>
